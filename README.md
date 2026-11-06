@@ -10,6 +10,10 @@ English**, measures a writing voice and helps draft or revise text against that 
 
 ## Use the plugin
 
+For a visual explanation of the workflow, see the [HTML walkthrough](docs/style-workflow.html).
+Follow the [viewing instructions](docs/serving.md) to serve it locally. It includes a prepared
+notes-to-draft example and downloadable requests for drafting and voice profiling.
+
 Once this repository is published, Claude Code users can register the marketplace and install the
 plugin themselves:
 

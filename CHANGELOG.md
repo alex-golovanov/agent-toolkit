@@ -12,6 +12,7 @@ schemas change when measurement compatibility changes.
 - English schema-2 analyzer, synthetic regression tests, and relocated-plugin checks.
 - Formatting, linting, metadata validation, CI, and contributor/release procedures.
 - Upstream MIT notice and exact revision provenance.
+- A portable HTML workflow guide with interactive examples and reusable Markdown requests.
 
 ### Changed
 

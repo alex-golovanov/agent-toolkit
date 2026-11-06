@@ -26,6 +26,13 @@ calibration result is presented as an English result, and no accuracy guarantee 
 Bibliographic references and the credited prompt influence are retained in the
 [profile reference](plugins/style-skills/skills/style-portrait/layers.md).
 
+## Walkthrough fonts
+
+The [HTML walkthrough](docs/style-workflow.html) embeds Bricolage Grotesque, Instrument Sans, and
+JetBrains Mono from Google Fonts. Their SIL Open Font License notices are included in the document's
+"Embedded font licenses" section so the licenses travel with the portable file. These fonts are
+document assets, not installed system fonts or plugin runtime dependencies.
+
 ## Development tools
 
 Ruff, pytest, Oxfmt, and markdownlint-cli2 are development dependencies; their code is not vendored
