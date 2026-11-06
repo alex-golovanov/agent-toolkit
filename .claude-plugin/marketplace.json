@@ -1,0 +1,15 @@
+{
+  "name": "agent-toolkit",
+  "description": "Skills and plugins maintained by Alex Golovanov",
+  "owner": {
+    "name": "Alex Golovanov",
+    "url": "https://github.com/alex-golovanov"
+  },
+  "plugins": [
+    {
+      "name": "style-skills",
+      "source": "./plugins/style-skills",
+      "description": "Measure an English writing voice, then draft and revise against its profile."
+    }
+  ]
+}

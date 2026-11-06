@@ -1,0 +1,11 @@
+node_modules/
+.venv/
+local/
+corpora/
+profiles/
+exports/
+bun.lock
+*-metrics.json
+*-style.md
+corpus.md
+draft.md

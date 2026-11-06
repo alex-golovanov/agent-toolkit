@@ -1,0 +1,17 @@
+{
+  "name": "agent-toolkit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Skills and plugins by Alex Golovanov",
+  "license": "MIT",
+  "packageManager": "bun@1.4.2",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint:markdown": "markdownlint-cli2"
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "0.24.0",
+    "prettier": "3.8.3"
+  }
+}

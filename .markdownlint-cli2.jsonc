@@ -1,0 +1,20 @@
+{
+  "config": {
+    "default": true,
+    "MD013": false,
+    "MD024": { "siblings_only": true },
+  },
+  "globs": ["**/*.md"],
+  "ignores": [
+    "node_modules/**",
+    ".venv/**",
+    "local/**",
+    "corpora/**",
+    "profiles/**",
+    "exports/**",
+    "**/*-metrics.json",
+    "**/*-style.md",
+    "corpus.md",
+    "draft.md",
+  ],
+}
