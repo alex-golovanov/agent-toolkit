@@ -1,0 +1,13 @@
+{
+  "name": "style-skills",
+  "displayName": "Style Skills — English",
+  "version": "0.1.0",
+  "description": "Build an English writing-style profile and use it to draft, revise, and check text.",
+  "author": {
+    "name": "Alex Golovanov"
+  },
+  "homepage": "https://github.com/alex-golovanov/agent-toolkit/tree/main/plugins/style-skills",
+  "repository": "https://github.com/alex-golovanov/agent-toolkit",
+  "license": "MIT",
+  "keywords": ["style", "tone-of-voice", "writing", "english"]
+}
