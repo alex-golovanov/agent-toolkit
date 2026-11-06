@@ -28,6 +28,6 @@ Bibliographic references and the credited prompt influence are retained in the
 
 ## Development tools
 
-Ruff, pytest, Prettier, and markdownlint-cli2 are development dependencies; their code is not
-vendored or included in installable plugin folders. Each is governed by its own upstream license.
-The analyzer itself uses Python's standard library.
+Ruff, pytest, Oxfmt, and markdownlint-cli2 are development dependencies; their code is not vendored
+or included in installable plugin folders. Each is governed by its own upstream license. The
+analyzer itself uses Python's standard library.

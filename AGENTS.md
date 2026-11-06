@@ -9,7 +9,7 @@ prompts, and public output. Preserve third-party copyright notices.
   repository without explicit user authorization.
 - Do not install tools, dependencies, or skills on the owner's computer. The owner installs them.
   Dependency changes require explicit approval. The approved development tools are Ruff, pytest,
-  Prettier, and markdownlint-cli2.
+  Oxfmt, and markdownlint-cli2.
 - Do not register plugins or enable hooks as part of ordinary development.
 - Write regression tests for changed behavior. Use temporary directories for outputs; tests must not
   mutate live runtime data.

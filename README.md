@@ -48,7 +48,7 @@ Python alone. They do not replace formatting and linting checks.
 
 | Command            | Purpose                                                                              |
 | ------------------ | ------------------------------------------------------------------------------------ |
-| `make format`      | Apply Ruff fixes, Python formatting, and Prettier formatting                         |
+| `make format`      | Apply Ruff fixes, Python formatting, and Oxfmt formatting                            |
 | `make check`       | Check formatting, lint Python and Markdown, validate repository metadata, run pytest |
 | `make test`        | Run tests with pytest                                                                |
 | `make test-stdlib` | Run tests with Python's built-in unittest runner                                     |

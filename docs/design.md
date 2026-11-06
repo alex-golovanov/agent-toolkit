@@ -25,8 +25,8 @@ lexical-diversity limitations. Upstream Russian calibration is not evidence of E
 ## Quality and distribution
 
 Ruff formats and lints Python; pytest runs behavioral and CLI tests. Tests also run through
-standard-library unittest for environments without development tools. Prettier formats Markdown,
-JSON, and YAML; markdownlint-cli2 checks Markdown. Repository validation checks metadata, catalog
+standard-library unittest for environments without development tools. Oxfmt formats Markdown, JSON,
+and YAML; markdownlint-cli2 checks Markdown. Repository validation checks metadata, catalog
 consistency, portable paths, and local documentation links. CI runs the same checks, with pinned
 actions and read-only repository permissions. Public examples are synthetic and labeled.
 

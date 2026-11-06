@@ -18,7 +18,7 @@ make check PYTHON=.venv/bin/python
 git diff --check
 ```
 
-Python formatting and linting use Ruff. Documentation and manifest formatting use Prettier; Markdown
+Python formatting and linting use Ruff. Documentation and manifest formatting use Oxfmt; Markdown
 structure uses markdownlint-cli2. Tests use unittest-compatible cases and run under pytest in the
 full gate. A standard-library run exercises the same cases, but is not a substitute for all
 development checks.

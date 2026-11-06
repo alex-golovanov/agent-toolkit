@@ -13,6 +13,11 @@ schemas change when measurement compatibility changes.
 - Formatting, linting, metadata validation, CI, and contributor/release procedures.
 - Upstream MIT notice and exact revision provenance.
 
+### Changed
+
+- Replaced Prettier with Oxfmt for documentation and configuration formatting; Ruff continues to
+  format and lint Python.
+
 ### Compatibility
 
 - Russian/schema-1 profiles must be rebuilt from English source texts.
