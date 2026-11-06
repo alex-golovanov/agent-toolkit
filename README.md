@@ -73,8 +73,7 @@ show prepared text; they do not run a model.
 
 ## Load the plugin
 
-Once this repository is published, Claude Code users can register the marketplace and install the
-plugin themselves:
+Claude Code users can register this public marketplace and install the plugin themselves:
 
 ```text
 /plugin marketplace add alex-golovanov/agent-toolkit

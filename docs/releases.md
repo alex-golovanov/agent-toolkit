@@ -22,7 +22,7 @@ GitHub release.
 
 ## Repository protection after publication
 
-After CI has run at least once, configure a main-branch ruleset requiring pull requests and the
+After CI has run at least once, configure main-branch protection requiring pull requests and the
 quality/compatibility statuses. Enable GitHub private vulnerability reporting. These are separate
 repository settings; the presence of workflow and policy files does not mean those settings have
 been enabled.
