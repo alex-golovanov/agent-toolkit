@@ -1,4 +1,4 @@
-## Change
+# Change
 
 Describe the problem and the resulting behavior. Link an issue when applicable.
 

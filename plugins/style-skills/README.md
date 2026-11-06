@@ -98,10 +98,11 @@ standalone skill use, copy both skill folders as siblings and resolve `style.py`
   messages are excluded by default. `--keep-forwards` explicitly includes forwards. Multiple-chat
   exports are rejected.
 
-The assembled corpus uses `### ` headings as reserved text boundaries. Ordinary third-level headings
-in source content must be changed before assembly; this format does not distinguish a post header
-from an article's `### ` subheading. Verify author selection independently: a Telegram message
-without a forward attribute can still be someone else's words, especially in a group chat.
+The assembled corpus uses `###` followed by a space as reserved text boundaries. Ordinary
+third-level headings in source content must be changed before assembly; this format does not
+distinguish a post header from an article's third-level subheading. Verify author selection
+independently: a Telegram message without a forward attribute can still be someone else's words,
+especially in a group chat.
 
 ## What is measured
 

@@ -16,6 +16,7 @@ schemas change when measurement compatibility changes.
 
 ### Fixed
 
+- Corrected Markdown lint issues in the pull request template and corpus-boundary documentation.
 - Markdown line wrapping no longer creates false sentence boundaries. Explicit list items, headings,
   and blank paragraphs retain boundaries. Rebuild older profiles made from wrapped source prose.
 

@@ -46,8 +46,8 @@ python3 "$S/style.py" metrics corpus.md \
 
 Use one input command, not both. A single flat file can separate posts with `---`, `***`, `===`, or
 two blank lines. Initial YAML frontmatter is excluded. The corpus format reserves lines starting
-with `### ` as text boundaries; convert ordinary third-level headings before using that format. A
-Telegram export must contain exactly one chat.
+with `###` followed by a space as text boundaries; convert ordinary third-level headings before
+using that format. A Telegram export must contain exactly one chat.
 
 ## Interpret the results
 
