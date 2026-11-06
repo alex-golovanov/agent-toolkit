@@ -79,14 +79,31 @@ def words(text):
 
 
 def sentences(text):
-    """Heuristic English boundaries; newlines delimit unpunctuated lists.
+    """Heuristic boundaries with soft wraps joined inside Markdown blocks.
 
     Protect common title abbreviations, initials, and decimals. This is not a
-    general syntactic parser; ambiguous abbreviations still need human review.
+    general Markdown or syntactic parser; ambiguous abbreviations and unmarked
+    lists still need human review. Use explicit bullets or blank lines for lists.
     """
-    out = []
+    blocks = []
+    pending = []
     for line in text.splitlines():
-        protected = ABBREVIATION.sub(lambda m: m[0].replace(".", "\0"), line.strip())
+        line = line.strip()
+        heading = re.match(r"#{1,6}\s", line)
+        item = re.match(r"(?:[-+*]|\d+[.)])\s", line)
+        if not line or heading or item:
+            if pending:
+                blocks.append(" ".join(pending))
+                pending = []
+        if heading:
+            blocks.append(line)
+        elif line:
+            pending.append(line)
+    if pending:
+        blocks.append(" ".join(pending))
+    out = []
+    for block in blocks:
+        protected = ABBREVIATION.sub(lambda m: m[0].replace(".", "\0"), block)
         protected = re.sub(r"\b[A-Z]\.(?=\s+[A-Z])", lambda m: m[0][:-1] + "\0", protected)
         for part in SENTENCE_END.split(protected):
             if words(part):

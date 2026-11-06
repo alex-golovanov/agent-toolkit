@@ -14,7 +14,15 @@ schemas change when measurement compatibility changes.
 - Upstream MIT notice and exact revision provenance.
 - A portable HTML workflow guide with interactive examples and reusable Markdown requests.
 
+### Fixed
+
+- Markdown line wrapping no longer creates false sentence boundaries. Explicit list items, headings,
+  and blank paragraphs retain boundaries. Rebuild older profiles made from wrapped source prose.
+
 ### Changed
+
+- Reworked the READMEs around the human writing workflow, with reusable requests and measurement
+  limits.
 
 - Replaced Prettier with Oxfmt for documentation and configuration formatting; Ruff continues to
   format and lint Python.

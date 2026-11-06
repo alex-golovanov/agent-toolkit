@@ -57,10 +57,31 @@ class EnglishMetricsTests(unittest.TestCase):
         text = 'Dr. J. Smith paid 3.5 dollars. "Done!" We left.'
         self.assertEqual(len(style.sentences(text)), 3)
 
-    def test_newlines_delimit_unpunctuated_lists(self):
+    def test_markdown_items_keep_separate_boundaries(self):
         self.assertEqual(
-            style.sentences("One item\nAnother item\n\nLast item"),
-            ["One item", "Another item", "Last item"],
+            style.sentences("- One item\n- Another item\n\nLast item"),
+            ["- One item", "- Another item", "Last item"],
+        )
+
+    def test_wrapped_prose_preserves_hand_counted_sentence_geometry(self):
+        for text in ("We go home. Then we rest.", "We go\nhome. Then\nwe rest."):
+            with self.subTest(text=text):
+                result = style.analyze([text])
+                self.assertEqual(result["meta"]["sentences"], 2)
+                self.assertEqual(result["geometry"]["sentence_words_mean"], 3)
+                self.assertEqual(result["geometry"]["sentence_words_sd"], 0)
+
+    def test_wrapped_lists_headings_and_paragraphs_keep_boundaries(self):
+        text = "# A heading\nSome wrapped\nprose.\n- First wrapped\n  item\n- Second item\n\nLast paragraph"
+        self.assertEqual(
+            style.sentences(text),
+            [
+                "# A heading",
+                "Some wrapped prose.",
+                "- First wrapped item",
+                "- Second item",
+                "Last paragraph",
+            ],
         )
 
     def test_sentence_geometry_matches_hand_count(self):

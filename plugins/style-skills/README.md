@@ -13,7 +13,56 @@ This is an English adaptation of Vyacheslav Startsev's Style Skills 1.2.0. The p
 version, 0.1.0, and metrics schema, 2. It does not accept upstream Russian profiles. See
 [provenance](../../THIRD_PARTY.md) for the exact source revision.
 
-## Quick start
+## From braindump to finished prose
+
+The braindump supplies the content. A portrait supplies guidance about voice. The agent does the
+writing, and the Python helper measures selected features of the result.
+
+For a new piece, ask the agent to organize the notes into an outline, draft from the supplied facts,
+apply your portrait if available, and review the result. Keep uncertain transcription separate from
+verified details. A style pass cannot supply missing evidence or resolve an ambiguous product name.
+
+For example, these **fictional** notes:
+
+> Plant sensor kept alerting after watering. Checked every minute. Soil takes time to settle. Waited
+> half an hour before checking again. Fewer repeated alerts. Only tried the kitchen pot.
+
+could become:
+
+> Waiting half an hour after watering reduced the plant sensor's repeated alerts. Checking every
+> minute had caught the soil before the moisture settled. The longer interval worked for the kitchen
+> pot; the other plants still need testing.
+
+The agent has reorganized the argument and removed repetition. No style portrait is needed for that
+basic cleanup. A portrait adds a more specific brief: how this author opens, explains a mechanism,
+uses personal reactions, and qualifies a conclusion.
+
+### First-time setup and everyday use
+
+| When                           | Action                                                            | Result                                                          |
+| ------------------------------ | ----------------------------------------------------------------- | --------------------------------------------------------------- |
+| Once you have suitable samples | Ask `style-portrait` to read finished writing in the target genre | A metrics JSON file and a Markdown voice map with writing rules |
+| For each piece                 | Give the agent your notes, audience, purpose, and required facts  | An outline and draft                                            |
+| When voice matching matters    | Ask `writing-in-style` to apply both profile files                | A revised draft and advisory comparison                         |
+| Before sharing                 | Review factual accuracy, missing context, readability, and voice  | Your editorial decision                                         |
+
+A profile is reusable context, not model training. You can also apply it to an existing draft. Use
+the [drafting request](../../docs/prompts/braindump-to-prose.md),
+[portrait request](../../docs/prompts/build-voice-profile.md), and
+[revision request](../../docs/prompts/apply-voice-profile.md) as starting points. The illustrated
+[walkthrough](../../docs/style-workflow.html) has a longer prepared example;
+[serve it locally](../../docs/serving.md) to read it in a browser.
+
+Choose writing you would want the next piece to resemble. Remove other authors' passages and quoted
+prompts. Separate the test input from the profile samples: if testing an older braindump, exclude
+its finished article so the profile does not contain the answer. Record agent-assisted editing when
+that is part of the sample history.
+
+The two skills cover profiling and writing with a profile. Organizing raw notes uses the agent's
+ordinary writing ability; no separate braindump plugin is required for this workflow. There is no
+automatic end-to-end publishing system here.
+
+## Run the local analyzer
 
 Python 3.11 or newer is sufficient. From the repository root:
 
@@ -90,7 +139,9 @@ Drafts under 120 words receive a warning. `mattr_500` falls back to raw TTR belo
 that length it samples 500-token windows every 100 tokens, following the upstream method. It is not
 an exhaustive all-window MATTR.
 
-Sentence splitting handles common titles, initials, quoted sentence endings, and decimals
+Sentence splitting joins soft-wrapped prose and keeps blank paragraphs, Markdown headings, and
+explicit list items separate. Use bullets or blank lines for unpunctuated lists; plain newlines are
+interpreted as wrapping. Common titles, initials, quoted sentence endings, and decimals are handled
 heuristically. Abbreviations remain ambiguous. Marker lists are curated surface patterns; words such
 as “must” or “well” can have different functions in context. Emoji counts measure matching code
 points, not visible grapheme clusters. Review the source and the whole draft alongside the numbers.
@@ -109,7 +160,8 @@ attribution accuracy.
 
 Profiles declare `meta.language: "en"` and `meta.schema_version: 2`. This tag records the selected
 analyzer, not language detection. Rebuild profiles from English source texts rather than relabeling
-Russian or schema-1 JSON.
+Russian or schema-1 JSON. Profiles measured before the Markdown wrapping fix should also be rebuilt
+from their sources if those sources contained hard-wrapped prose; the schema is unchanged.
 
 ## Privacy and attribution
 
