@@ -1,0 +1,11 @@
+{
+  "$schema": "https://getbb.app/schemas/plugins.schema.json",
+  "schemaVersion": 1,
+  "name": "agent-toolkit",
+  "plugins": [
+    {
+      "name": "bb-plugin-auto-compact",
+      "source": "./plugins/bb-plugin-auto-compact"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "asOf": "2026-11-09",
+  "pluginVersion": "0.3.0",
+  "environment": {
+    "operatingSystem": "macOS",
+    "bbVersion": "0.49.0",
+    "sdkVersion": "0.6.132",
+    "nodeVersion": "25.9.0"
+  },
+  "liveObservations": [
+    {
+      "model": "gpt-6.1-sol",
+      "serviceTier": "default (Standard)",
+      "acceptedSubmissions": 3,
+      "completedNativeCompactionItems": 3,
+      "completedTurns": 3,
+      "method": "Matched plugin-origin requests by client request ID to native turns; confirmed item/completed with item.type=contextCompaction and turn/completed status=completed."
+    }
+  ],
+  "simulatedCoverage": {
+    "pluginTests": 41,
+    "models": ["gpt-6.1-sol", "gpt-6-astra", "synthetic other configured Codex model ID"],
+    "serviceTiers": ["default", "fast", "flex", null],
+    "note": "Eligibility combinations and fake submissions. Astra Fast fake submission explicitly verifies preserved model, tier, and reasoning; not all combinations have live evidence."
+  },
+  "limitations": [
+    "No separately verified live Astra operation in this snapshot.",
+    "Observational production activity; no forced model calls or controlled benchmark.",
+    "Native compaction samples did not provide a useful input/cache token breakdown; cache reuse and net savings are unverified.",
+    "The current usage helper looks for thread/compacted boundaries and can return empty when Codex reports contextCompaction item completion instead.",
+    "BB/SDK/operating-system compatibility beyond the reference environment is not established by the declared engine range."
+  ],
+  "privacy": "Only model-level aggregate metadata is published. Conversation text, thread IDs, titles, account details, and machine paths are omitted."
+}

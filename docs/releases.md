@@ -1,8 +1,9 @@
 # Release procedure
 
-A release is a reviewed, tested commit with an explicit plugin version and changelog entry. Version
-0.1.0 is prepared in source; it is not a published release until a maintainer creates the tag and
-GitHub release.
+A tagged release is a reviewed, tested commit with an explicit plugin version and changelog entry.
+Plugin versions are independent: Style Skills is 0.1.0 and BB Auto Compact is 0.3.0 in source.
+Publishing commits to `main` makes the explicit branch-tracking BB Git install available; it does
+not create a semver tag or GitHub release.
 
 1. Update the affected plugin's manifest version using semantic versioning. Update metrics schema
    versions separately when their meaning changes, and test rejection or migration of incompatible
@@ -31,3 +32,16 @@ Dependency upgrades require maintainer review. Update exact versions and the Bun
 deliberately, run the full gate, and update pinned GitHub Action commits after checking their
 upstream releases. Do not run automated dependency installers or attach installation hooks to Git
 operations.
+
+## BB branch-tracking distribution
+
+BB Auto Compact is indexed by `.bb/plugins.json` at `plugins/bb-plugin-auto-compact/`. The
+documented installation tracks this repository's `main` branch with the collection selector
+`bb-plugin-auto-compact`. A reviewed commit and authorized Git push are sufficient to make that
+source available. No npm publication, BB marketplace submission, release tag, or GitHub release is
+part of this workflow. Read-only repository visibility checks do not change repository settings.
+
+Before pushing, run the applicable checks, build the plugin with the existing BB toolchain, review
+all outgoing commits for private data, and confirm the destination branch. The Quality workflow runs
+after pushing; verify its status against the pushed commit. Do not claim a tagged release or
+marketplace listing from a Git push alone.

@@ -1,14 +1,50 @@
 # Agent Toolkit
 
-Reusable skills and plugins maintained by Alex Golovanov. The first plugin, **Style Skills —
-English**, measures a writing voice and helps draft or revise text against that profile.
+[![Quality](https://github.com/alex-golovanov/agent-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/alex-golovanov/agent-toolkit/actions/workflows/ci.yml)
 
-| Package                                        | Capabilities                                            | Runtime                             |
-| ---------------------------------------------- | ------------------------------------------------------- | ----------------------------------- |
-| [Style Skills](plugins/style-skills/README.md) | Profile an English voice; write and check drafts        | Python 3.11+, standard library only |
-| [Standalone skills](skills/README.md)          | Location for independent skills as the collection grows | Defined by each skill               |
+Reusable skills and plugins maintained by Alex Golovanov. **Style Skills — English** measures a
+writing voice and helps draft or revise text against that profile. **BB Auto Compact** schedules
+native Codex compaction across eligible BB conversations.
 
-## Turn rough ideas into something readable
+| Package                                                     | Capabilities                                            | Runtime                                           |
+| ----------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------- |
+| [Style Skills](plugins/style-skills/README.md)              | Profile an English voice; write and check drafts        | Python 3.11+, standard library only               |
+| [BB Auto Compact](plugins/bb-plugin-auto-compact/README.md) | Global or selected idle compaction for Codex threads    | BB, existing Codex setup; no package dependencies |
+| [Standalone skills](skills/README.md)                       | Location for independent skills as the collection grows | Defined by each skill                             |
+
+## BB Auto Compact · start here
+
+**Global Codex compaction after context exceeds 70% and the conversation is idle for 15 minutes.**
+Sol, Astra, and other configured Codex models keep their existing speed and reasoning setting.
+
+```sh
+bb plugin install git:https://github.com/alex-golovanov/agent-toolkit.git@main --plugin bb-plugin-auto-compact
+bb plugin config auto-compact set scope all
+bb plugin config auto-compact set model all
+bb plugin config auto-compact set maxAttempts 0
+bb plugin config auto-compact set mode compact
+bb auto-compact status --json
+```
+
+Fresh installs start **off**, with selected scope and one attempt. The commands above enable
+**global, ongoing paid operation**; `maxAttempts=0` removes the submission-count limit. The
+threshold and idle defaults are already 70% and 15 minutes. Each chat needs fresh model activity
+after activation; the plugin does not catch up old idle sessions.
+
+| Before you start | What to know                                                                                                       |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Runtime          | BB and an existing Codex setup; tested against BB 0.49.0 / SDK 0.6.132                                             |
+| Models           | All configured Codex models; live Sol observations and simulated Astra/multi-speed tests are documented separately |
+| Cost             | Native Codex usage applies; the timer estimates an early opportunity and does not detect exact cache expiry        |
+| Installation     | The repository's `.bb/plugins.json` selects this BB plugin; the Claude marketplace is separate                     |
+
+**[Read the complete setup, model evidence, settings, and troubleshooting guide →](plugins/bb-plugin-auto-compact/README.md)**
+
+No npm publication or marketplace step is needed for this branch-tracking Git installation.
+
+---
+
+## Style Skills · turn rough ideas into readable prose
 
 A braindump usually has the material you need: the observation, the failed attempt, the useful
 change, and the reason it matters. An agent can organize that material into prose. Style Skills adds
@@ -71,7 +107,7 @@ For the illustrated explanation and a prepared notes-to-draft example, read the
 [local viewing instructions](docs/serving.md). The example is synthetic and interactive controls
 show prepared text; they do not run a model.
 
-## Load the plugin
+## Install Style Skills
 
 Claude Code users can register this public marketplace and install the plugin themselves:
 
@@ -92,10 +128,11 @@ prove runtime compatibility with every agent; no live agent installation is part
 
 ## Develop
 
-Prerequisites: Python 3.11+, Node.js 24+, Bun 1.4.2, and Make. The plugin itself does not require
-Node.js, Bun, Make, or any third-party Python package. Confirm `python3 --version` meets the minimum
-before creating the environment; substitute your installed Python 3.11+ executable if necessary.
-Contributors install development dependencies themselves:
+Prerequisites: Python 3.11+, Node.js 24+, Bun 1.4.2, and Make. Style Skills itself does not require
+Node.js, Bun, Make, or any third-party Python package. BB Auto Compact runs inside BB and uses
+Node.js for its fake-SDK tests. Confirm `python3 --version` meets the minimum before creating the
+environment; substitute your installed Python 3.11+ executable if necessary. Contributors install
+development dependencies themselves:
 
 ```bash
 python3 -m venv .venv
@@ -105,8 +142,9 @@ make check PYTHON=.venv/bin/python
 ```
 
 No commands in `make check` install software. If development tooling is not yet available,
-`make test-stdlib` and `make validate` run the same behavioral tests and repository contracts using
-Python alone. They do not replace formatting and linting checks.
+`make test-stdlib` and `make validate` run behavioral tests and repository contracts without
+third-party Python packages. The relocated BB plugin test also requires the installed Node.js
+runtime. They do not replace formatting and linting checks.
 
 | Command            | Purpose                                                                              |
 | ------------------ | ------------------------------------------------------------------------------------ |

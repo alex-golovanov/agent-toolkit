@@ -38,3 +38,10 @@ document assets, not installed system fonts or plugin runtime dependencies.
 Ruff, pytest, Oxfmt, and markdownlint-cli2 are development dependencies; their code is not vendored
 or included in installable plugin folders. Each is governed by its own upstream license. The
 analyzer itself uses Python's standard library.
+
+## BB Auto Compact
+
+BB Auto Compact is original project code, imported from the initial standalone implementation
+(revision `d711f7b`) without personal audit data or runtime state. It uses public BB plugin APIs and
+the existing Codex provider; neither implementation is vendored. Its MIT notice is in
+[plugins/bb-plugin-auto-compact/LICENSE](plugins/bb-plugin-auto-compact/LICENSE).
