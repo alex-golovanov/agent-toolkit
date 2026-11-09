@@ -42,6 +42,7 @@ The public thread list returns a bare array and accepts limit/offset without a p
 Status includes project/title/context fields and bounded per-thread output. Natural native
 compaction and cache reuse remain unverified until an eligible conversation reaches its cutoff.
 
-The global scope is enabled in the live local-path installation. The one-attempt cap remains:
-automatic approval review rejected `maxAttempts=0` because uncapped billable submissions require
-explicit approval. Implementing the zero setting does not mean it has been activated.
+The global scope is enabled in the live local-path installation. The one-attempt cap remains: the
+user explicitly approved removing it, but automatic approval review still rejected `maxAttempts=0`
+due to ongoing unbounded financial impact despite authorization. The zero setting is implemented but
+remains blocked by execution permissions; repeated user approval is not missing.

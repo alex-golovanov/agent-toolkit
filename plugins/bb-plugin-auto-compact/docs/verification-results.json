@@ -47,7 +47,7 @@
     {
       "name": "Uncapped ongoing activation",
       "status": "blocked",
-      "note": "Automatic approval review rejected maxAttempts=0 because unlimited billable submissions need explicit approval. Existing maxAttempts=1 retained."
+      "note": "User explicitly authorized removing the attempt limit. Automatic approval review still rejected maxAttempts=0 due to ongoing unbounded financial impact despite authorization. Live maxAttempts=1 remains; this is not awaiting repeated user approval."
     }
   ]
 }
