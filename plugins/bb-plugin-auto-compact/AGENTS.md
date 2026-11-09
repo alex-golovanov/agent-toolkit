@@ -8,16 +8,18 @@ The approved policy starts at context **above 70%** and **15 minutes continuousl
 early idle policy, not an exact cache-expiry detector. Model activity resets the timer. Ordinary
 timeline activity does not.
 
-The user approved global discovery and activation on 2026-11-09, then explicitly requested removal
-of the attempt limitation for repeated automatic compaction across all eligible chats. This approval
-is valid and must not be requested again. The execution permission system nevertheless rejected
-`maxAttempts=0`, explicitly acknowledging authorization but refusing the unbounded financial impact.
-The live settings remain `scope=all`, `maxAttempts=1`, GPT-6.1 Sol at Standard speed, and the 70% /
-15-minute cutoff. This is an execution-permission block, not missing user approval. Do not bypass it
-through an indirect setting change, inflated finite limit, code change, or alternate tool. No forced
-or shortened live tests, other models, new providers, or tooling installations are covered. Fresh
-usage is still required after activation/reload; old idle sessions must not be caught up. New
-installations still default off and selected.
+The user explicitly approved global, repeated automatic compaction and subsequently requested all
+Codex models, including Sol and Astra. Use `scope=all` and `model=all` for that live scope,
+preserving each conversation's current model, speed, and reasoning setting. Do not impose new model
+or speed restrictions without discussing them. The owner has removed the attempt cap: a read-only
+check confirmed live `maxAttempts=0`; do not restore the initial one-attempt limit. The agent's
+earlier attempt to remove it was blocked by execution permissions and was not bypassed by code or
+another tool. The threshold and idle cutoff remain 70% / 15 minutes. No forced or shortened paid
+tests, new providers, or tooling installation are authorized. Fresh usage is required after
+activation/reload; old idle sessions are not caught up. Hidden/archived chats, active or pending
+work, offline hosts, and unknown context/execution shapes remain ineligible. New installs default
+off and selected, with the all-model filter; explain the effective scope and any remaining limits
+clearly.
 
 Never run compaction as a test without approved paid-call scope. Keep all automated tests on fake
 SDK calls and injected clocks. Native Codex may retry a single operation internally; the plugin

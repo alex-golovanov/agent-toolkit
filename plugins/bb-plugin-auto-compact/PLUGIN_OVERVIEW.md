@@ -8,11 +8,12 @@ timer. Codex does not expose an exact cache-expiration timestamp through this in
 
 ## Scope and controls
 
-Choose selected thread IDs or all eligible conversations, including new ones. This version supports
-visible GPT-6.1 Sol conversations at Standard speed. It starts off, with selected scope and one
-persistent attempt. After approval, ongoing operation uses a zero count limit. Observe mode records
-candidates without calling a model. Read-only CLI commands show discovery health, per-thread
-context, timers, outcomes, and cumulative attempts.
+Choose selected thread IDs or all eligible conversations, including new ones. All configured Codex
+models are supported, including Sol and Astra; each conversation keeps its existing model, speed,
+and reasoning setting. Only visible, unarchived conversations qualify. It starts off, with selected
+scope and one persistent attempt. After approval, ongoing operation uses a zero count limit. Observe
+mode records candidates without calling a model. Read-only CLI commands show discovery health,
+per-thread context, timers, outcomes, and cumulative attempts.
 
 Pending interactions, queued messages, background agents, unavailable hosts, changed execution
 settings, and stale timers prevent submission. Fresh usage is required after activation or reload;

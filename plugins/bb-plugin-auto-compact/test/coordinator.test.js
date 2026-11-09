@@ -421,3 +421,28 @@ test("global activation never arms historical usage, and scope narrowing cancels
   assert.equal(f.coordinator.states.has(THREAD), false);
   assert.equal(f.coordinator.scoped(THREAD), false);
 });
+
+test("global all-model submissions preserve each conversation's resolved model, tier and reasoning", async () => {
+  const f = await fixture({
+    config: { scope: "all", threadIds: "", model: "all", maxAttempts: 0 },
+  });
+  const second = "thr_astra";
+  const astra = snapshot();
+  astra.thread.id = second;
+  astra.execution = { model: "gpt-6-astra", serviceTier: "fast", reasoningLevel: "high" };
+  f.snapshots.set(second, astra);
+  f.events.set(second, [request(), usage()]);
+  await f.arm();
+  await f.arm(second);
+  f.setTime(Math.max(...[...f.coordinator.states.values()].map((state) => state.arm.dueAt)));
+  await Promise.all([f.coordinator.submit(THREAD), f.coordinator.submit(second)]);
+  assert.equal(f.calls.length, 2);
+  for (const call of f.calls) {
+    const expected = f.snapshots.get(call.threadId).execution;
+    assert.equal(call.input.model, expected.model);
+    assert.equal(call.input.serviceTier, expected.serviceTier);
+    assert.equal(call.input.reasoningLevel, expected.reasoningLevel);
+  }
+  assert.equal((await f.coordinator.status(second)).threads[0].model, "gpt-6-astra");
+  assert.equal((await f.coordinator.status()).ledger.attemptsUsed, 2);
+});

@@ -157,7 +157,7 @@ export async function fixture(options = {}) {
             ...faults.admission,
           });
           if (decision.action === "reject") throw new Error(decision.message);
-          calls.push({ threadId, at: time });
+          calls.push({ threadId, at: time, input: structuredClone(input) });
           if (faults.compact) await faults.compact();
           return faults.outcome ?? { delivery: "sent" };
         },

@@ -1,9 +1,9 @@
 {
   "name": "bb-plugin-auto-compact",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
-  "description": "Preventive idle compaction for explicitly selected BB Codex threads.",
+  "description": "Automatic idle compaction across BB Codex conversations, preserving each chat model and speed.",
   "engines": {
     "node": ">=22",
     "bbPluginSdk": ">=0.6.132 <0.7.0"
@@ -14,7 +14,7 @@
   },
   "bb": {
     "name": "BB Auto Compact [Experimental]",
-    "description": "Automatically compact eligible Codex conversations across projects above 70% context after 15 idle minutes.",
+    "description": "Automatically compact Codex conversations across projects and models above 70% context after 15 idle minutes.",
     "branding": {
       "icon": "Timer"
     },

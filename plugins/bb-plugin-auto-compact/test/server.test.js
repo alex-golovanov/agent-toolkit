@@ -57,6 +57,8 @@ test("factory registers inactive defaults, validated settings and read-only CLI"
   await plugin(bb);
   assert.equal(descriptors.mode.default, "off");
   assert.equal(descriptors.scope.default, "selected");
+  assert.equal(descriptors.model.default, "all");
+  assert.deepEqual(descriptors.model.options, ["all", "gpt-6.1-sol", "gpt-6-astra"]);
   assert.equal(descriptors.maxAttempts.experimental_schema["~standard"].validate(0).value, 0);
   assert.equal(descriptors.contextPercent.default, 70);
   assert.equal(descriptors.idleMinutes.default, 15);

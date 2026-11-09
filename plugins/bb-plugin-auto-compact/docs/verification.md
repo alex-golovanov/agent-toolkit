@@ -42,7 +42,14 @@ The public thread list returns a bare array and accepts limit/offset without a p
 Status includes project/title/context fields and bounded per-thread output. Natural native
 compaction and cache reuse remain unverified until an eligible conversation reaches its cutoff.
 
-The global scope is enabled in the live local-path installation. The one-attempt cap remains: the
-user explicitly approved removing it, but automatic approval review still rejected `maxAttempts=0`
-due to ongoing unbounded financial impact despite authorization. The zero setting is implemented but
-remains blocked by execution permissions; repeated user approval is not missing.
+The global scope is enabled in the live local-path installation. A read-only check confirmed
+`maxAttempts=0`, so the initial one-attempt cap is no longer active. The agent's earlier setting
+change was rejected, and no indirect workaround was executed.
+
+## All Codex models and speeds
+
+Version 0.3.0 removes the Sol/Standard restriction. The all-model filter accepts a configured Codex
+model and preserves its resolved speed and reasoning setting; malformed execution shapes fail
+closed. Fake tests cover Sol, Astra, another configured model, Standard/Fast/Flex/default tiers, and
+concurrent submissions with distinct execution settings. A model or speed change during an armed
+timer still invalidates that decision. No forced paid test is part of this verification.

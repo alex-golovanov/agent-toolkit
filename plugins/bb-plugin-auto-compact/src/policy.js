@@ -16,7 +16,7 @@ export const DEFAULTS = Object.freeze({
   contextPercent: 70,
   idleMinutes: 15,
   maxAttempts: 1,
-  model: "gpt-6.1-sol",
+  model: "all",
 });
 
 // Public structured builtin-command input, identical to BB's composer /compact.
@@ -62,7 +62,8 @@ export function configFrom(values) {
   if (ids.length > 50 || ids.some((id) => !/^thr_[a-z0-9]+$/.test(id))) {
     throw new Error("Use at most 50 explicit BB thread IDs; wildcards are not supported");
   }
-  if (config.model !== "gpt-6.1-sol") throw new Error("This plugin supports gpt-6.1-sol only");
+  if (!["all", "gpt-6.1-sol", "gpt-6-astra"].includes(config.model))
+    throw new Error("Use all Codex models, gpt-6.1-sol, or gpt-6-astra");
   return { ...config, ids };
 }
 
@@ -186,8 +187,16 @@ export function eligibility(snapshot, config) {
     return "unknown-pending-work";
   if (snapshot.interactions.length) return "pending-interaction";
   if (snapshot.queued.length || thread.queuedMessageCount !== 0) return "queued-work";
-  if (snapshot.execution?.model !== config.model || snapshot.execution?.serviceTier !== "default")
-    return "execution-outside-trial";
+  const execution = snapshot.execution;
+  if (
+    !execution ||
+    typeof execution.model !== "string" ||
+    !execution.model.trim() ||
+    (execution.serviceTier != null && typeof execution.serviceTier !== "string") ||
+    (execution.reasoningLevel != null && typeof execution.reasoningLevel !== "string")
+  )
+    return "unknown-execution";
+  if (config.model !== "all" && execution.model !== config.model) return "model-filtered";
   const usage = snapshot.usage;
   if (
     !usage ||

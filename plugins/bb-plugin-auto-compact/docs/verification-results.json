@@ -3,7 +3,7 @@
     {
       "name": "Policy, coordinator and factory tests",
       "status": "passed",
-      "cases": 39
+      "cases": 41
     },
     {
       "name": "BB plugin build and SDK artifact metadata",
@@ -28,7 +28,7 @@
       "name": "Toolkit repository and relocated plugin tests",
       "status": "passed",
       "repositoryCases": 51,
-      "relocatedNodeCases": 39
+      "relocatedNodeCases": 41
     },
     {
       "name": "Toolkit metadata, Oxfmt and Markdown checks",
@@ -46,8 +46,13 @@
     },
     {
       "name": "Uncapped ongoing activation",
-      "status": "blocked",
-      "note": "User explicitly authorized removing the attempt limit. Automatic approval review still rejected maxAttempts=0 due to ongoing unbounded financial impact despite authorization. Live maxAttempts=1 remains; this is not awaiting repeated user approval."
+      "status": "passed",
+      "note": "Read-only live verification confirmed maxAttempts=0 after owner action; the agent did not bypass its earlier rejected setting change."
+    },
+    {
+      "name": "All Codex models and preserved execution settings",
+      "status": "passed",
+      "note": "Fake tests accept Sol, Astra, other configured models, and multiple speeds; submissions retain each thread model/tier/reasoning. No forced paid model calls."
     }
   ]
 }

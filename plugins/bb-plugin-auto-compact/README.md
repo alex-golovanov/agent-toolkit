@@ -14,8 +14,9 @@ excluded from automatic skill injection.
 New installations start **off**, with selected scope, no selected threads, and one lifetime attempt.
 To watch existing and new conversations across projects, set `scope` to `all`. Discovery reads
 visible, unarchived Codex threads on startup and once a minute; activity events enroll new threads
-immediately. Only GPT-6.1 Sol at Standard speed can submit compaction. Other models and providers
-are skipped.
+immediately. `model=all` covers every configured Codex model, including Sol and Astra, at each
+conversation's existing speed and reasoning setting. It never changes a chat to Sol or Standard. An
+optional model filter can select Sol or Astra; other providers are outside this plugin's scope.
 
 Modes are `off`, `observe` (record candidates without compaction), and `compact` (native
 submission). Settings are available in Installed plugins and `bb plugin config auto-compact`.
@@ -71,7 +72,7 @@ net savings.
 ## Commands
 
 `bb auto-compact status --json` reads scope, discovery health, watched count, and up to 100 thread
-rows with project, title, context usage, timer, and waiting reason. Use
+rows with project, title, model, speed, context usage, timer, and waiting reason. Use
 `bb auto-compact status --thread THREAD_ID --json` to inspect one conversation. The persisted
 counter records submission attempts, not successful completions.
 

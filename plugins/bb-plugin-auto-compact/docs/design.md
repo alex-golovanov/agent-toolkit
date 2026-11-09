@@ -73,3 +73,11 @@ Add a validated `--thread` filter to status, history, and usage. Test pagination
 changes during discovery, new-thread enrollment, ongoing generations, and reload accounting with
 fake SDK calls. Build and reload while off, configure the approved scope, and verify live read-only
 status after activation. Native completion and cache reuse still require a natural trigger.
+
+## All Codex models and speeds
+
+The approved global scope now includes all configured Codex models, including Sol and Astra, at each
+conversation's current speed. `model=all` is the default model filter, with optional explicit
+Sol/Astra filters. Validate resolved execution shape, capture model/tier/reasoning when arming, and
+pass those unchanged to native compaction. Continue cancelling on execution changes. Status must
+name each conversation's model and speed so an unexpected exclusion is visible.

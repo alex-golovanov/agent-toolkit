@@ -7,6 +7,9 @@ schemas change when measurement compatibility changes.
 
 ### Added
 
+- BB Auto Compact 0.3.0: all Codex models and speeds, including Sol and Astra, preserving each
+  conversation's execution settings. Status now exposes model and speed.
+
 - BB Auto Compact 0.2.0: global conversation discovery, ongoing operation, and per-thread status,
   history, and usage filters. New installations retain conservative off/selected defaults.
 

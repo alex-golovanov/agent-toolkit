@@ -16,10 +16,11 @@ Use `bb auto-compact usage --json` to read native token-usage samples from recen
 They are scoped to BB turns, not independently reconciled provider charges.
 
 The starting policy is exact context above 70% and 15 minutes idle. Codex cache expiry is not
-observable directly. Only visible GPT-6.1 Sol threads at Standard speed qualify. Scope `all`
-discovers existing and new conversations across projects. Scope `selected` uses explicit thread IDs.
-`maxAttempts=0` means ongoing operation with no count limit; positive values cap the persistent
-cumulative counter.
+observable directly. Only visible, unarchived Codex threads qualify. `model=all` uses each chat's
+existing model, speed, and reasoning setting, including Sol and Astra. Optional model filters are
+explicit settings. Scope `all` discovers existing and new conversations across projects. Scope
+`selected` uses explicit thread IDs. `maxAttempts=0` means ongoing operation with no count limit;
+positive values cap the persistent cumulative counter.
 
 Status includes project, title, context usage, waiting reason, and discovery health. It returns at
 most 100 rows; use `--thread THREAD_ID` on status, history, or usage to inspect a particular thread.

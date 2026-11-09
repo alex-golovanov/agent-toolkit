@@ -241,6 +241,8 @@ export class Coordinator {
     state.title = snapshot.thread?.title ?? snapshot.thread?.titleFallback ?? null;
     state.usedTokens = snapshot.usage?.usedTokens ?? null;
     state.modelContextWindow = snapshot.usage?.modelContextWindow ?? null;
+    state.model = snapshot.execution?.model ?? null;
+    state.serviceTier = snapshot.execution?.serviceTier ?? null;
     if (idleEvent && state.idleSince === null) state.idleSince = this.now();
     for (const boundary of boundaries) {
       await this.checkpoint(threadId, state.consumedContentSeq);
@@ -545,6 +547,8 @@ export class Coordinator {
           title: state.title ?? null,
           usedTokens: state.usedTokens ?? null,
           modelContextWindow: state.modelContextWindow ?? null,
+          model: state.model ?? null,
+          serviceTier: state.serviceTier ?? null,
           status: state.status,
           reason: state.reason,
           dueAt: state.arm?.dueAt ?? null,

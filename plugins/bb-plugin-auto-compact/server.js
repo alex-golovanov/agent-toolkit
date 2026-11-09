@@ -117,9 +117,9 @@ export default async function plugin(bb) {
     },
     model: {
       type: "select",
-      label: "Supported model (Standard speed)",
-      options: ["gpt-6.1-sol"],
-      default: "gpt-6.1-sol",
+      label: "Model filter (all = every Codex model; keep each chat's speed)",
+      options: ["all", "gpt-6.1-sol", "gpt-6-astra"],
+      default: "all",
     },
   });
   const coordinator = await Coordinator.create(bb, await settings.get());

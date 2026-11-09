@@ -64,7 +64,7 @@ test("context must be strictly above 70%, with exact finite usage", () => {
   assert.equal(eligibility(value, config), "unknown-context");
 });
 
-test("pending work, hidden threads, offline hosts and changed model/tier fail closed", () => {
+test("pending work, hidden threads, offline hosts and model filters fail closed", () => {
   const mutations = [
     [(s) => (s.thread.status = "active"), "not-idle"],
     [(s) => (s.thread.runtime.displayStatus = "awaiting-input"), "not-idle"],
@@ -75,8 +75,9 @@ test("pending work, hidden threads, offline hosts and changed model/tier fail cl
     [(s) => (s.interactions = [{}]), "pending-interaction"],
     [(s) => (s.queued = [{}]), "queued-work"],
     [(s) => (s.queued = {}), "unknown-pending-work"],
-    [(s) => (s.execution.model = "gpt-6-astra"), "execution-outside-trial"],
-    [(s) => (s.execution.serviceTier = "fast"), "execution-outside-trial"],
+    [(s) => (s.execution.model = "gpt-6-astra"), "model-filtered"],
+    [(s) => (s.execution = null), "unknown-execution"],
+    [(s) => (s.execution.serviceTier = {}), "unknown-execution"],
   ];
   for (const [mutate, expected] of mutations) {
     const value = snapshot();
@@ -137,4 +138,22 @@ test("duplicate/out-of-order events do not regress usage", () => {
   reduceEvents(state, [usage(2, BASE + 2), request(1)], BASE);
   reduceEvents(state, [usage(2, BASE + 99)], BASE);
   assert.equal(state.lastUsageAt, BASE + 2);
+});
+
+test("all-model policy accepts Sol, Astra, other Codex models and each conversation's speed", () => {
+  const all = configFrom({ model: "all" });
+  assert.equal(configFrom({}).model, "all");
+  assert.equal(configFrom({ model: "gpt-6-astra" }).model, "gpt-6-astra");
+  for (const model of ["gpt-6.1-sol", "gpt-6-astra", "other-configured-codex-model"]) {
+    for (const serviceTier of ["default", "fast", "flex", null]) {
+      const current = snapshot();
+      current.execution = { model, serviceTier, reasoningLevel: "high" };
+      assert.equal(eligibility(current, all), null);
+    }
+  }
+  const unknown = snapshot();
+  unknown.execution.model = "";
+  assert.equal(eligibility(unknown, all), "unknown-execution");
+  unknown.execution = { model: "gpt-6-astra", reasoningLevel: {} };
+  assert.equal(eligibility(unknown, all), "unknown-execution");
 });
