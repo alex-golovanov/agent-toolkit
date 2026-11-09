@@ -1,5 +1,7 @@
 # Agent Toolkit
 
+[![Quality](https://github.com/alex-golovanov/agent-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/alex-golovanov/agent-toolkit/actions/workflows/ci.yml)
+
 Reusable skills and plugins maintained by Alex Golovanov. **Style Skills — English** measures a
 writing voice and helps draft or revise text against that profile. **BB Auto Compact** schedules
 native Codex compaction across eligible BB conversations.

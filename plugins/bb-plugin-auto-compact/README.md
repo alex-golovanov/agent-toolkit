@@ -1,5 +1,7 @@
 # BB Auto Compact
 
+[![Quality](https://github.com/alex-golovanov/agent-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/alex-golovanov/agent-toolkit/actions/workflows/ci.yml)
+
 **Automatic native compaction for Codex conversations in [BB](https://getbb.app).**
 
 Keep working across projects without remembering which conversations need compaction. BB Auto

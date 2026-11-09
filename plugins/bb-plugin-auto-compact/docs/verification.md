@@ -61,3 +61,12 @@ model and preserves its resolved speed and reasoning setting; malformed executio
 closed. Fake tests cover Sol, Astra, another configured model, Standard/Fast/Flex/default tiers, and
 concurrent submissions with distinct execution settings. A model or speed change during an armed
 timer still invalidates that decision. No forced paid test is part of this verification.
+
+## Publication checks
+
+The full repository quality gate and all three compatibility jobs passed in
+[GitHub CI](https://github.com/alex-golovanov/agent-toolkit/actions/runs/42667138189) for revision
+`6dde435`. That includes Ruff formatting/lint, Oxfmt, Markdown lint, metadata validation, pytest,
+and the relocated Node suite. The compatibility jobs cover Python 3.11, 3.12, and 3.14 with Node 24
+on Linux; they use fake SDK calls and do not establish a live Linux BB compaction result. Locally,
+Ruff and pytest remain unavailable, so the documented standard-library fallback was used.

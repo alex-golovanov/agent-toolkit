@@ -36,8 +36,9 @@
     },
     {
       "name": "Full Python formatting/lint/pytest gate",
-      "status": "blocked",
-      "note": "Ruff and pytest are not installed in the active Python environment. Standard-library fallback completed; no tools installed."
+      "status": "passed",
+      "note": "Full quality and Python 3.11/3.12/3.14 compatibility jobs passed in GitHub CI on 6dde435. Ruff/pytest remain unavailable in the local Python environment; no local tools were installed.",
+      "evidence": "https://github.com/alex-golovanov/agent-toolkit/actions/runs/42667138189"
     },
     {
       "name": "Global discovery and new-conversation enrollment",
