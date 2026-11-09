@@ -92,6 +92,19 @@ export async function fixture(options = {}) {
         },
       },
       threads: {
+        async list({ limit, offset, archived, includeHidden }) {
+          if (faults.list) return faults.list({ limit, offset, archived, includeHidden });
+          return structuredClone(
+            [...snapshots.values()]
+              .map((value) => value.thread)
+              .filter(
+                (thread) =>
+                  (!archived ? thread.archivedAt == null : true) &&
+                  (includeHidden || thread.visibility === "visible"),
+              )
+              .slice(offset, offset + limit),
+          );
+        },
         async get({ threadId, include }) {
           if (faults.threadGet) await faults.threadGet(threadId);
           const { thread, environment } = snapshots.get(threadId);

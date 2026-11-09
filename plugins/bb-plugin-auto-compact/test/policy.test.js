@@ -16,14 +16,17 @@ test("off is the default and scope/model/numeric values are validated", () => {
   assert.deepEqual(configFrom({ threadIds: "thr_a, thr_a thr_b" }).ids, ["thr_a", "thr_b"]);
   for (const values of [
     { mode: "yes" },
+    { scope: "everything" },
     { threadIds: "*" },
     { idleMinutes: 0 },
     { contextPercent: 100 },
     { maxAttempts: 1.5 },
+    { maxAttempts: -1 },
     { model: "other" },
   ]) {
     assert.throws(() => configFrom(values));
   }
+  assert.equal(configFrom({ scope: "all", maxAttempts: 0 }).maxAttempts, 0);
 });
 
 test("only structured builtin maintenance commands are recognized", () => {

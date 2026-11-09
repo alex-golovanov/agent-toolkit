@@ -54,3 +54,22 @@ Verify threshold boundaries, fresh-usage rearming, command detection, pending wo
 races, sleep, clock reversal, reloads, failed reservation, global allowance and no retries. Build
 with BB's existing compiler. A live read-only SDK probe can check the API contract without
 installing a plugin. A paid live trial is a separate final activation step.
+
+## Global scope extension
+
+The user approved global, ongoing operation after reviewing the selected-thread trial limitations.
+Add `scope=all` alongside selected scope. Discover visible, unarchived Codex threads across projects
+through the public paginated thread list (100 rows per page, bounded to 100 pages), at startup and
+once a minute. Activity events can enroll new threads immediately. Unknown list shapes are reported
+as discovery errors; per-thread eligibility remains mandatory. Cancel discovery work on disposal or
+settings changes and invalidate state removed from global scope. Do not arm from historical usage.
+
+Keep safe installation defaults. A zero maximum attempt setting removes only the submission-count
+limit; cumulative attempt accounting and consumed-content checkpoints remain persistent. Positive
+limits retain the trial behavior. No retries, sleep catch-up, model expansion, or forced live tests.
+
+Expose discovery health, count, and bounded per-thread title/project/context rows through status.
+Add a validated `--thread` filter to status, history, and usage. Test pagination, filtering, scope
+changes during discovery, new-thread enrollment, ongoing generations, and reload accounting with
+fake SDK calls. Build and reload while off, configure the approved scope, and verify live read-only
+status after activation. Native completion and cache reuse still require a natural trigger.

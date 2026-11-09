@@ -16,6 +16,20 @@ import {
 const LEDGER_KEY = "attempt-ledger-v1";
 const HISTORY_KEY = "decision-history-v1";
 const EMPTY_LEDGER = { version: 1, attemptsUsed: 0, consumed: {} };
+const DISCOVERY_MS = 60_000;
+const PAGE_SIZE = 100;
+
+function discoverable(thread) {
+  return (
+    thread &&
+    typeof thread.id === "string" &&
+    /^thr_[a-z0-9]+$/.test(thread.id) &&
+    thread.providerId === "codex" &&
+    thread.visibility === "visible" &&
+    thread.archivedAt == null &&
+    thread.deletedAt == null
+  );
+}
 
 export class Coordinator {
   constructor(bb, values, { now = Date.now } = {}) {
@@ -32,6 +46,8 @@ export class Coordinator {
     this.permits = new Map();
     this.abort = new AbortController();
     this.disposed = false;
+    this.discovery = { at: null, error: null };
+    this.discoveryJob = null;
   }
 
   static async create(bb, values, options) {
@@ -71,7 +87,13 @@ export class Coordinator {
   }
 
   scoped(threadId) {
-    return !this.disposed && this.config.mode !== "off" && this.config.ids.includes(threadId);
+    return (
+      !this.disposed &&
+      this.config.mode !== "off" &&
+      typeof threadId === "string" &&
+      /^thr_[a-z0-9]+$/.test(threadId) &&
+      (this.config.scope === "all" || this.config.ids.includes(threadId))
+    );
   }
 
   state(threadId) {
@@ -215,6 +237,10 @@ export class Coordinator {
     const boundaries = reduceEvents(state, events, this.freshAfter);
     const reducedRevision = state.revision;
     state.status = snapshot.thread?.status ?? null;
+    state.projectId = snapshot.thread?.projectId ?? null;
+    state.title = snapshot.thread?.title ?? snapshot.thread?.titleFallback ?? null;
+    state.usedTokens = snapshot.usage?.usedTokens ?? null;
+    state.modelContextWindow = snapshot.usage?.modelContextWindow ?? null;
     if (idleEvent && state.idleSince === null) state.idleSince = this.now();
     for (const boundary of boundaries) {
       await this.checkpoint(threadId, state.consumedContentSeq);
@@ -260,10 +286,60 @@ export class Coordinator {
     this.freshAfter = this.now();
     for (const state of this.states.values())
       invalidate(state, "settings-changed", { clearUsage: true });
-    for (const id of this.states.keys()) if (!next.ids.includes(id)) this.states.delete(id);
+    for (const id of this.states.keys())
+      if (next.scope !== "all" && !next.ids.includes(id)) this.states.delete(id);
+    this.discovery = { at: null, error: null };
+  }
+
+  async discover() {
+    if (this.config.mode === "off" || this.config.scope !== "all" || this.disposed) return;
+    if (this.discoveryJob) return this.discoveryJob;
+    const config = this.config;
+    this.discoveryJob = (async () => {
+      try {
+        const seen = new Set();
+        for (let page = 0; page < 100; page += 1) {
+          const rows = await this.bb.sdk.threads.list({
+            archived: false,
+            includeHidden: false,
+            limit: PAGE_SIZE,
+            offset: page * PAGE_SIZE,
+            signal: this.abort.signal,
+          });
+          if (this.disposed || this.config !== config) return;
+          if (!Array.isArray(rows) || rows.some((row) => !row || typeof row.id !== "string"))
+            throw new Error("Unknown thread list response");
+          for (const thread of rows.filter(discoverable)) {
+            seen.add(thread.id);
+            if (!this.states.has(thread.id)) await this.onEvents(thread.id).catch(() => {});
+            if (this.disposed || this.config !== config) return;
+          }
+          if (rows.length < PAGE_SIZE) {
+            for (const [id, state] of this.states) {
+              if (!seen.has(id)) {
+                invalidate(state, "outside-global-scope", { clearUsage: true });
+                this.states.delete(id);
+              }
+            }
+            this.discovery = { at: this.now(), error: null };
+            return;
+          }
+        }
+        throw new Error("Thread discovery exceeded 100 pages");
+      } catch (error) {
+        if (!this.disposed && this.config === config) {
+          this.discovery = { at: this.now(), error: error.message };
+          this.bb.log.error(`auto-compact discovery: ${error.message}`);
+        }
+      }
+    })().finally(() => {
+      this.discoveryJob = null;
+    });
+    return this.discoveryJob;
   }
 
   async start() {
+    await this.discover();
     await Promise.allSettled(this.config.ids.map((id) => this.onEvents(id)));
   }
 
@@ -284,6 +360,8 @@ export class Coordinator {
         jobs.push(this.queue(state.threadId, () => this.submit(state.threadId)));
     }
     await Promise.allSettled(jobs);
+    if (this.discovery.at === null || now - this.discovery.at >= DISCOVERY_MS)
+      await this.discover();
   }
 
   admit(context) {
@@ -371,7 +449,7 @@ export class Coordinator {
         const ledger = await this.ledger();
         if (!this.scoped(threadId) || state.revision !== revision || state.arm !== arm)
           return false;
-        if (ledger.attemptsUsed >= this.config.maxAttempts) {
+        if (this.config.maxAttempts !== 0 && ledger.attemptsUsed >= this.config.maxAttempts) {
           invalidate(state, "attempt-limit");
           return false;
         }
@@ -450,19 +528,30 @@ export class Coordinator {
     }
   }
 
-  async status() {
+  async status(threadId) {
+    const states = [...this.states.values()];
     return {
       settings: this.config,
       ledger: await this.ledger(),
-      threads: [...this.states.values()].map((state) => ({
-        threadId: state.threadId,
-        status: state.status,
-        reason: state.reason,
-        dueAt: state.arm?.dueAt ?? null,
-        lastUsageAt: state.lastUsageAt,
-        contentSeq: state.contentSeq,
-        consumedContentSeq: state.consumedContentSeq,
-      })),
+      discovery: this.discovery,
+      watchedCount: states.length,
+      truncated: !threadId && states.length > 100,
+      threads: states
+        .filter((state) => !threadId || state.threadId === threadId)
+        .slice(0, 100)
+        .map((state) => ({
+          threadId: state.threadId,
+          projectId: state.projectId ?? null,
+          title: state.title ?? null,
+          usedTokens: state.usedTokens ?? null,
+          modelContextWindow: state.modelContextWindow ?? null,
+          status: state.status,
+          reason: state.reason,
+          dueAt: state.arm?.dueAt ?? null,
+          lastUsageAt: state.lastUsageAt,
+          contentSeq: state.contentSeq,
+          consumedContentSeq: state.consumedContentSeq,
+        })),
     };
   }
 
@@ -470,9 +559,22 @@ export class Coordinator {
     return (await this.bb.storage.kv.get(HISTORY_KEY)) ?? [];
   }
 
-  async usage() {
+  async usage(selectedThreadId) {
     const result = [];
-    for (const threadId of this.config.ids) {
+    const ids = selectedThreadId
+      ? [selectedThreadId]
+      : this.config.scope === "all"
+        ? [
+            ...new Set(
+              (await this.history())
+                .filter((row) => row.action === "context-boundary")
+                .reverse()
+                .map((row) => row.threadId),
+            ),
+          ].slice(0, 10)
+        : this.config.ids;
+    for (const threadId of ids) {
+      if (!this.scoped(threadId)) continue;
       if (this.disposed) break;
       const rows = await this.bb.sdk.threads.events.list({
         threadId,

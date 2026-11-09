@@ -316,3 +316,108 @@ test("an unexpectedly queued native submission is removed instead of left for a 
     (await f.coordinator.history()).some((row) => row.action === "deferred-submission-cancelled"),
   );
 });
+
+test("global discovery spans pages and projects, filtering archived, hidden and other providers", async () => {
+  const f = await fixture({ config: { scope: "all", threadIds: "", maxAttempts: 0 } });
+  const rows = Array.from({ length: 101 }, (_, i) => ({
+    ...snapshot().thread,
+    id: `thr_page${i}`,
+    projectId: `project-${i}`,
+  }));
+  for (const thread of rows) {
+    const current = snapshot();
+    current.thread = thread;
+    f.snapshots.set(thread.id, current);
+    f.events.set(thread.id, [request(), usage()]);
+  }
+  rows.push({ ...snapshot().thread, id: "thr_claude", providerId: "claude-code" });
+  rows.push({ ...snapshot().thread, id: "thr_archived", archivedAt: BASE });
+  rows.push({ ...snapshot().thread, id: "thr_hidden", visibility: "hidden" });
+  const offsets = [];
+  f.faults.list = ({ limit, offset, archived, includeHidden }) => {
+    assert.equal(archived, false);
+    assert.equal(includeHidden, false);
+    offsets.push(offset);
+    return rows.slice(offset, offset + limit);
+  };
+  await f.coordinator.start();
+  assert.deepEqual(offsets, [0, 100]);
+  assert.equal((await f.coordinator.status()).watchedCount, 101);
+  assert.equal((await f.coordinator.status()).truncated, true);
+  assert.equal((await f.coordinator.status("thr_page100")).threads[0].projectId, "project-100");
+  assert.equal(f.coordinator.states.has("thr_claude"), false);
+  assert.equal(f.coordinator.states.has("thr_hidden"), false);
+  assert.equal(f.coordinator.states.has("thr_archived"), false);
+  assert.equal(f.calls.length, 0);
+});
+
+test("global scope discovers new conversations from activity without a manual ID list", async () => {
+  const f = await fixture({ config: { scope: "all", threadIds: "", maxAttempts: 0 } });
+  const second = "thr_new";
+  const current = snapshot();
+  current.thread.id = second;
+  f.snapshots.set(second, current);
+  f.events.set(second, [request(), usage()]);
+  await f.arm(second);
+  await f.due(second);
+  assert.equal(f.calls[0].threadId, second);
+  assert.equal((await f.coordinator.status()).ledger.attemptsUsed, 1);
+});
+
+test("ongoing mode allows new content generations across threads, never repeats one generation", async () => {
+  const f = await fixture({ config: { scope: "all", threadIds: "", maxAttempts: 0 } });
+  await f.arm();
+  await f.due();
+  await f.coordinator.onLifecycle(THREAD, "idle");
+  assert.equal(f.coordinator.state(THREAD).arm, null);
+  f.events.get(THREAD).push(request(3, f.now()), usage(4, f.now() + 1));
+  await f.arm();
+  await f.due();
+  assert.equal(f.calls.length, 2);
+  assert.equal((await f.coordinator.status()).ledger.attemptsUsed, 2);
+  const reload = await Coordinator.create(
+    f.bb,
+    { ...config, scope: "all", maxAttempts: 0 },
+    { now: () => f.now() + 1 },
+  );
+  await reload.start();
+  assert.equal(reload.state(THREAD).arm, null);
+  assert.equal((await reload.status()).ledger.attemptsUsed, 2);
+});
+
+test("discovery rejects unknown list responses and cancels on disposal or scope change", async () => {
+  const f = await fixture({ config: { scope: "all", threadIds: "" } });
+  f.faults.list = () => ({ threads: [] });
+  await f.coordinator.start();
+  assert.match((await f.coordinator.status()).discovery.error, /Unknown thread list/);
+  const blocked = deferred();
+  f.faults.list = () => blocked.promise;
+  const discovery = f.coordinator.discover();
+  f.coordinator.update({ ...config, scope: "selected" });
+  blocked.resolve([snapshot().thread]);
+  await discovery;
+  assert.equal(f.coordinator.states.size, 0);
+  const blockedAgain = deferred();
+  f.coordinator.update({ ...config, scope: "all" });
+  f.faults.list = () => blockedAgain.promise;
+  const disposing = f.coordinator.discover();
+  f.coordinator.dispose();
+  blockedAgain.resolve([snapshot().thread]);
+  await disposing;
+  assert.equal(f.coordinator.states.size, 0);
+  assert.equal(f.calls.length, 0);
+});
+
+test("global activation never arms historical usage, and scope narrowing cancels global timers", async () => {
+  const f = await fixture({ config: { scope: "all", threadIds: "" } });
+  f.setTime(BASE + 100);
+  f.coordinator.update({ ...config, scope: "all", threadIds: "" });
+  await f.coordinator.start();
+  assert.equal(f.coordinator.state(THREAD).arm, null);
+  f.events.get(THREAD).push(usage(3, f.now() + 1));
+  await f.arm();
+  assert.ok(f.coordinator.state(THREAD).arm);
+  f.coordinator.update({ ...config, scope: "selected", threadIds: "thr_other" });
+  assert.equal(f.coordinator.states.has(THREAD), false);
+  assert.equal(f.coordinator.scoped(THREAD), false);
+});

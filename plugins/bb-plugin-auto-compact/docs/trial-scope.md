@@ -1,11 +1,11 @@
-# Scoped activation guide
+# Activation and ongoing operation
 
 BB Auto Compact starts off. Installation and billable compaction require the user's explicit
 approval. Before activation, agree on selected BB thread IDs, the existing Codex model and speed,
 source conversation context, purpose, operation allowance, native retry policy, and expected or
 maximum cost. Never publish private thread IDs or conversation records in this repository.
 
-## Initial policy
+## Conservative installation defaults
 
 Use GPT-6.1 Sol at Standard speed, context strictly above 70%, 15 continuously idle minutes, and one
 persistent native submission attempt across the selected threads. Keep plugin retries disabled.
@@ -35,3 +35,16 @@ not increase it or retry without expanded approval.
 
 Pause new submissions with `bb plugin config auto-compact set mode off`. Keep the plugin loaded
 until any admitted operation finishes, so its retry guards remain available.
+
+## Global operation
+
+After approval for ongoing paid operation, set `scope` to `all`, `threadIds` to an empty string, and
+`maxAttempts` to `0`, then enable mode `compact`. The global scope covers existing and new visible,
+unarchived Codex conversations across projects. The model and speed restrictions remain unchanged.
+There is no fixed total submission count or credit cap in ongoing mode. Each compaction uses its
+conversation as input and retains the existing Codex native retry policy. The plugin never retries
+an ambiguous attempt for the same content generation. New content and fresh usage can qualify again.
+
+Use `bb auto-compact status --json` for discovery health and a bounded overview. Use the same
+command with `--thread THREAD_ID` for one conversation; history and usage accept the same filter.
+Switching to all scope never reconstructs overdue timers from old activity.

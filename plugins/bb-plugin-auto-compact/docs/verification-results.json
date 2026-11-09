@@ -3,7 +3,7 @@
     {
       "name": "Policy, coordinator and factory tests",
       "status": "passed",
-      "cases": 34
+      "cases": 39
     },
     {
       "name": "BB plugin build and SDK artifact metadata",
@@ -28,7 +28,7 @@
       "name": "Toolkit repository and relocated plugin tests",
       "status": "passed",
       "repositoryCases": 51,
-      "relocatedNodeCases": 34
+      "relocatedNodeCases": 39
     },
     {
       "name": "Toolkit metadata, Oxfmt and Markdown checks",
@@ -38,6 +38,16 @@
       "name": "Full Python formatting/lint/pytest gate",
       "status": "blocked",
       "note": "Ruff and pytest are not installed in the active Python environment. Standard-library fallback completed; no tools installed."
+    },
+    {
+      "name": "Global discovery and new-conversation enrollment",
+      "status": "passed",
+      "note": "Fake tests cover pagination, cross-project scope, filters, settings cancellation, and reloads; live global scope enabled."
+    },
+    {
+      "name": "Uncapped ongoing activation",
+      "status": "blocked",
+      "note": "Automatic approval review rejected maxAttempts=0 because unlimited billable submissions need explicit approval. Existing maxAttempts=1 retained."
     }
   ]
 }

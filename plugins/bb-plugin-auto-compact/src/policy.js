@@ -11,6 +11,7 @@ export const EVENT_TYPES = [
 
 export const DEFAULTS = Object.freeze({
   mode: "off",
+  scope: "selected",
   threadIds: "",
   contextPercent: 70,
   idleMinutes: 15,
@@ -46,10 +47,11 @@ export function compactInput() {
 export function configFrom(values) {
   const config = { ...DEFAULTS, ...values };
   if (!["off", "observe", "compact"].includes(config.mode)) throw new Error("Invalid mode");
+  if (!["selected", "all"].includes(config.scope)) throw new Error("Invalid scope");
   for (const [key, low, high] of [
     ["contextPercent", 1, 99],
     ["idleMinutes", 1, 240],
-    ["maxAttempts", 1, 100],
+    ["maxAttempts", 0, 1000000],
   ]) {
     if (!Number.isInteger(config[key]) || config[key] < low || config[key] > high) {
       throw new Error(`${key} must be an integer from ${low} to ${high}`);
@@ -60,7 +62,7 @@ export function configFrom(values) {
   if (ids.length > 50 || ids.some((id) => !/^thr_[a-z0-9]+$/.test(id))) {
     throw new Error("Use at most 50 explicit BB thread IDs; wildcards are not supported");
   }
-  if (config.model !== "gpt-6.1-sol") throw new Error("This trial supports gpt-6.1-sol only");
+  if (config.model !== "gpt-6.1-sol") throw new Error("This plugin supports gpt-6.1-sol only");
   return { ...config, ids };
 }
 

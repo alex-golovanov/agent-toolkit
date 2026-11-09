@@ -1,6 +1,7 @@
 # Verification and practical limits
 
-The implementation is built for an initial scoped trial, not an exact expiry guarantee.
+The plugin supports selected and global scope with an early idle policy, not an exact expiry
+guarantee.
 
 ## Checked locally
 
@@ -15,7 +16,7 @@ The implementation is built for an initial scoped trial, not an exact expiry gua
 - BB's installed compiler builds the real backend bundle and stamps SDK/identity metadata.
 - No package install, model call or plugin installation is part of these checks.
 
-## What remains for an approved live trial
+## Native outcome validation
 
 The toolkit local-path installation was verified on 2026-11-09: the background service and CLI
 loaded, off defaults were checked, and the approved selected-thread trial was configured. No
@@ -31,3 +32,16 @@ Exact expiry and total net savings remain unproven.
 
 Historical compaction samples used to motivate this policy came from Codex Desktop, not a live BB
 plugin trial. Personal audit records are not distributed with this plugin.
+
+## Global operation extension
+
+Global discovery and ongoing accounting are covered by fake-SDK tests: paginated cross-project
+listing, filtering of hidden/archived/other-provider threads, new conversations, settings changes
+during discovery, disposal, repeated content generations, and persistent counters across reloads.
+The public thread list returns a bare array and accepts limit/offset without a project selector.
+Status includes project/title/context fields and bounded per-thread output. Natural native
+compaction and cache reuse remain unverified until an eligible conversation reaches its cutoff.
+
+The global scope is enabled in the live local-path installation. The one-attempt cap remains:
+automatic approval review rejected `maxAttempts=0` because uncapped billable submissions require
+explicit approval. Implementing the zero setting does not mean it has been activated.

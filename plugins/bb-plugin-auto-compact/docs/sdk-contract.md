@@ -63,3 +63,11 @@ under BB Plugin Authoring.
 The source lives in the installed BB application and is not copied into the plugin. Fake tests
 preserve the verified async behavior and wrapper/array shapes. Native registration/build is verified
 separately; live installation requires approval.
+
+## Global discovery
+
+`bb.sdk.threads.list({archived: false, includeHidden: false, limit: 100, offset, signal})` returns a
+bare array of thread list entries across projects when no project selector is supplied. Entries
+carry thread identity, provider, visibility, archive state, and project identity. Pagination uses an
+integer offset. The coordinator filters Codex entries and still fetches the complete eligibility
+snapshot before arming or submitting. Discovery is bounded to 100 pages per scan and reports errors.

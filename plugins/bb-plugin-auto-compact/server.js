@@ -85,6 +85,12 @@ export function sleep(ms, signal) {
 export default async function plugin(bb) {
   const settings = bb.settings.define({
     mode: { type: "select", label: "Mode", options: ["off", "observe", "compact"], default: "off" },
+    scope: {
+      type: "select",
+      label: "Conversation scope",
+      options: ["selected", "all"],
+      default: "selected",
+    },
     threadIds: {
       type: "string",
       label: "Selected BB thread IDs (comma-separated)",
@@ -105,13 +111,13 @@ export default async function plugin(bb) {
     },
     maxAttempts: {
       type: "number",
-      label: "Lifetime submission allowance",
+      label: "Lifetime submission allowance (0 = ongoing, no limit)",
       default: 1,
-      experimental_schema: integerRange(1, 100),
+      experimental_schema: integerRange(0, 1000000),
     },
     model: {
       type: "select",
-      label: "Approved trial model (Standard speed)",
+      label: "Supported model (Standard speed)",
       options: ["gpt-6.1-sol"],
       default: "gpt-6.1-sol",
     },
@@ -122,7 +128,7 @@ export default async function plugin(bb) {
   bb.rpc.register(retryConsentContract, {
     "provider-retry.v1.consent": () => ({
       kind: "decline",
-      reason: "This bounded compaction trial does not allow automatic turn retries.",
+      reason: "Auto Compact does not retry failed or ambiguous compaction submissions.",
     }),
   });
   settings.onChange((next) => coordinator.update(next));
@@ -161,34 +167,42 @@ export default async function plugin(bb) {
     commands: [
       {
         name: "status",
-        summary: "Read settings, timers and remaining trial allowance",
-        usage: "bb auto-compact status [--json]",
+        summary: "Read settings, per-thread timers and submission accounting",
+        usage: "bb auto-compact status [--thread ID] [--json]",
       },
       {
         name: "history",
         summary: "Read the latest 50 decisions without conversation content",
-        usage: "bb auto-compact history [--json]",
+        usage: "bb auto-compact history [--thread ID] [--json]",
       },
       {
         name: "usage",
         summary: "Read native usage samples from recent compaction turns",
-        usage: "bb auto-compact usage [--json]",
+        usage: "bb auto-compact usage [--thread ID] [--json]",
       },
     ],
     async run(argv) {
       const [command = "status", ...flags] = argv;
-      if (
-        !["status", "history", "usage"].includes(command) ||
-        flags.some((flag) => flag !== "--json")
-      ) {
-        return { exitCode: 1, stderr: "Usage: bb auto-compact status|history|usage [--json]" };
+      let threadId;
+      let validFlags = true;
+      for (let i = 0; i < flags.length; i += 1) {
+        if (flags[i] === "--json") continue;
+        if (flags[i] === "--thread" && !threadId && /^thr_[a-z0-9]+$/.test(flags[i + 1] ?? "")) {
+          threadId = flags[++i];
+        } else validFlags = false;
+      }
+      if (!["status", "history", "usage"].includes(command) || !validFlags) {
+        return {
+          exitCode: 1,
+          stderr: "Usage: bb auto-compact status|history|usage [--thread ID] [--json]",
+        };
       }
       const value =
         command === "status"
-          ? await coordinator.status()
+          ? await coordinator.status(threadId)
           : command === "history"
-            ? await coordinator.history()
-            : await coordinator.usage();
+            ? (await coordinator.history()).filter((row) => !threadId || row.threadId === threadId)
+            : await coordinator.usage(threadId);
       return { exitCode: 0, stdout: JSON.stringify(value, null, 2) };
     },
   });

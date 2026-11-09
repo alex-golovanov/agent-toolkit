@@ -56,6 +56,8 @@ test("factory registers inactive defaults, validated settings and read-only CLI"
   };
   await plugin(bb);
   assert.equal(descriptors.mode.default, "off");
+  assert.equal(descriptors.scope.default, "selected");
+  assert.equal(descriptors.maxAttempts.experimental_schema["~standard"].validate(0).value, 0);
   assert.equal(descriptors.contextPercent.default, 70);
   assert.equal(descriptors.idleMinutes.default, 15);
   assert.equal(
@@ -77,6 +79,9 @@ test("factory registers inactive defaults, validated settings and read-only CLI"
   assert.equal(JSON.parse((await cli.run(["status", "--json"])).stdout).settings.mode, "off");
   assert.equal((await cli.run(["compact-now"])).exitCode, 1);
   assert.equal((await cli.run(["status", "--unknown"])).exitCode, 1);
+  assert.equal((await cli.run(["status", "--thread"])).exitCode, 1);
+  assert.equal((await cli.run(["status", "--thread", "*"])).exitCode, 1);
+  assert.equal((await cli.run(["status", "--thread", "thr_test1", "--json"])).exitCode, 0);
   changed({ mode: "observe" });
   assert.equal(JSON.parse((await cli.run(["status"])).stdout).settings.mode, "observe");
   const controller = new AbortController();

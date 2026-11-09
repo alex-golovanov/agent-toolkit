@@ -8,10 +8,14 @@ The approved policy starts at context **above 70%** and **15 minutes continuousl
 early idle policy, not an exact cache-expiry detector. Model activity resets the timer. Ordinary
 timeline activity does not.
 
-Keep the first trial explicitly scoped to selected thread IDs, GPT-6.1 Sol at Standard speed, and a
-persistent attempt allowance. Installation and billable execution need the user's exact approval
-under the standing global instructions. Building, unit tests, and read-only SDK checks do not
-authorize either installation or execution.
+The user approved global discovery and activation on 2026-11-09, replacing selected-thread scope.
+The live policy uses `scope=all`, GPT-6.1 Sol at Standard speed, and the 70% / 15-minute cutoff. The
+existing one-attempt cap remains: automatic approval review blocked `maxAttempts=0` as requiring
+explicit approval for uncapped paid submissions. Do not remove or expand that cap without resolving
+the rejected action's approval. Zero is an implemented opt-in setting, not an authorized live
+default. No forced or shortened live tests, other models, new providers, or tooling installations
+are covered. Fresh usage is still required after activation/reload; old idle sessions must not be
+caught up. New installations still default off and selected.
 
 Never run compaction as a test without approved paid-call scope. Keep all automated tests on fake
 SDK calls and injected clocks. Native Codex may retry a single operation internally; the plugin

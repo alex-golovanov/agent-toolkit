@@ -7,6 +7,9 @@ schemas change when measurement compatibility changes.
 
 ### Added
 
+- BB Auto Compact 0.2.0: global conversation discovery, ongoing operation, and per-thread status,
+  history, and usage filters. New installations retain conservative off/selected defaults.
+
 - BB Auto Compact 0.1.0 in `plugins/bb-plugin-auto-compact/`, with a BB collection index,
   dependency-free native Node tests, and scoped 70% / 15-minute idle scheduling.
 
