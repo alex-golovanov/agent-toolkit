@@ -6,11 +6,10 @@ Reusable skills and plugins maintained by Alex Golovanov. **Style Skills — Eng
 writing voice and helps draft or revise text against that profile. **BB Auto Compact** schedules
 native Codex compaction across eligible BB conversations.
 
-| Package                                                     | Capabilities                                            | Runtime                                           |
-| ----------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------- |
-| [Style Skills](plugins/style-skills/README.md)              | Profile an English voice; write and check drafts        | Python 3.11+, standard library only               |
-| [BB Auto Compact](plugins/bb-plugin-auto-compact/README.md) | Global or selected idle compaction for Codex threads    | BB, existing Codex setup; no package dependencies |
-| [Standalone skills](skills/README.md)                       | Location for independent skills as the collection grows | Defined by each skill                             |
+| Package                                                     | Capabilities                                         | Runtime                                           |
+| ----------------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------- |
+| [Style Skills](plugins/style-skills/README.md)              | Profile an English voice; write and check drafts     | Python 3.11+, standard library only               |
+| [BB Auto Compact](plugins/bb-plugin-auto-compact/README.md) | Global or selected idle compaction for Codex threads | BB, existing Codex setup; no package dependencies |
 
 ## BB Auto Compact · start here
 

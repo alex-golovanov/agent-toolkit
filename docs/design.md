@@ -6,9 +6,9 @@ adaptation of Style Skills. Approved on November 6, 2026.
 ## Layout
 
 `plugins/<name>/` contains independently installable plugins. Each plugin owns its manifest, skills,
-supporting scripts, documentation, and license. `skills/` holds independent skills; plugin skills
-are not duplicated there. The root marketplace lists local plugins. Shared contributor tooling lives
-at the root.
+supporting scripts, documentation, and license. Supporting skills live inside their owning plugin.
+The root Claude marketplace and BB collection index list plugins for their respective runtimes.
+Shared contributor tooling lives at the root.
 
 ## English port
 

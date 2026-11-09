@@ -25,8 +25,7 @@ development checks.
 
 ## Add a skill or plugin
 
-1. Put a standalone skill in `skills/<name>/`, or a bundled skill in
-   `plugins/<plugin>/skills/<name>/`.
+1. Put each bundled skill in `plugins/<plugin>/skills/<name>/`.
 2. Add `SKILL.md` with unique, single-line YAML `name` and `description` fields. Use a lowercase
    hyphenated name matching the folder. Quote YAML-sensitive descriptions. Put operational guidance
    in the body, not in a long trigger list.
