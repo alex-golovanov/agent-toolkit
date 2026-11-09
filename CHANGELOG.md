@@ -7,6 +7,9 @@ schemas change when measurement compatibility changes.
 
 ### Added
 
+- BB Auto Compact 0.1.0 in `plugins/bb-plugin-auto-compact/`, with a BB collection index,
+  dependency-free native Node tests, and scoped 70% / 15-minute idle scheduling.
+
 - Public collection layout for plugins and standalone skills, with a Claude marketplace.
 - English Style Skills 0.1.0: `style-portrait` and `writing-in-style`.
 - English schema-2 analyzer, synthetic regression tests, and relocated-plugin checks.

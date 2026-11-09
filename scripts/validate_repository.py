@@ -1,6 +1,6 @@
 """Validate this collection's metadata, portable paths, and Markdown file links.
 
-This is a repository contract check, not a full Claude or Codex schema validator.
+This is a repository contract check, not a full Claude or BB schema validator.
 No network requests, dependency installation, or generated files are involved.
 """
 
@@ -24,6 +24,7 @@ IGNORED = {
     "corpora",
     "profiles",
     "exports",
+    "dist",
 }
 
 
@@ -109,6 +110,55 @@ def markdown_links(path, root):
     return errors
 
 
+def validate_bb_collection(root):
+    """Check this collection's dependency-free, headless BB plugin packages."""
+    collection = read_object(root / ".bb/plugins.json")
+    if collection.get("schemaVersion") != 1 or collection.get("name") != "agent-toolkit":
+        raise ValueError("Invalid BB collection identity or schema version")
+    entries = collection.get("plugins")
+    if not isinstance(entries, list) or not entries:
+        raise ValueError("BB collection must list at least one plugin")
+    names, sources = set(), set()
+    for entry in entries:
+        if not isinstance(entry, dict):
+            raise ValueError("BB plugin entries must be objects")
+        name = entry.get("name", "")
+        if not isinstance(name, str) or not SLUG.fullmatch(name) or name in names:
+            raise ValueError("Invalid or duplicate BB plugin name")
+        names.add(name)
+        source = local_path(root, entry.get("source"))
+        if source in sources or source != (root / "plugins" / name).resolve():
+            raise ValueError("BB plugins must have unique sources under plugins/<name>")
+        sources.add(source)
+        manifest = read_object(source / "package.json")
+        if manifest.get("name") != name or not name.startswith("bb-plugin-"):
+            raise ValueError(f"{name}: BB package name differs from collection or lacks prefix")
+        if not isinstance(manifest.get("version"), str) or not VERSION.fullmatch(manifest["version"]):
+            raise ValueError(f"{name}: invalid BB plugin version")
+        bb = manifest.get("bb")
+        if not isinstance(bb, dict) or not all(
+            isinstance(bb.get(key), str) and bb[key].strip() for key in ("name", "description")
+        ):
+            raise ValueError(f"{name}: missing BB display identity")
+        entry_path = local_path(source, bb.get("server"))
+        if not entry_path.is_file():
+            raise ValueError(f"{name}: missing BB server entry")
+        if manifest.get("dependencies") or manifest.get("devDependencies"):
+            raise ValueError(f"{name}: BB plugin must remain dependency-free")
+        if bb.get("skills") != []:
+            raise ValueError(f"{name}: BB plugin must disable automatic skill injection")
+        for required in ("README.md", "LICENSE", "PLUGIN_OVERVIEW.md"):
+            if not (source / required).is_file():
+                raise ValueError(f"{name}: missing {required}")
+    disk = {
+        p.parent.resolve()
+        for p in (root / "plugins").glob("*/package.json")
+        if "bb" in read_object(p)
+    }
+    if disk != sources:
+        raise ValueError("Unlisted BB plugin manifest or missing BB plugin source")
+
+
 def validate(root):
     errors = []
     try:
@@ -153,6 +203,10 @@ def validate(root):
         }
         if disk != sources:
             raise ValueError("Unlisted plugin manifest or missing plugin source")
+    except (OSError, ValueError, TypeError) as error:
+        errors.append(str(error))
+    try:
+        validate_bb_collection(root)
     except (OSError, ValueError, TypeError) as error:
         errors.append(str(error))
     for path in files(root):

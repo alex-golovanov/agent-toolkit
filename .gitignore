@@ -19,3 +19,7 @@ exports/
 *-style.md
 corpus.md
 draft.md
+
+# BB plugin build artifacts
+dist/
+*.log

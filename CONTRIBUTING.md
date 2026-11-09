@@ -33,9 +33,12 @@ development checks.
 3. Keep supporting code, references, and assets within the installable unit. Resolve resources from
    the loaded skill location. Do not hardcode a home path or require a repository checkout at
    runtime.
-4. For a plugin, add `.claude-plugin/plugin.json`, a README, and a license file; register its unique
-   local path in the root marketplace. Existing supported manifest fields follow the
-   [Claude reference](https://code.claude.com/docs/en/plugins-reference).
+4. Add a README and license inside each plugin. For Claude plugins, add `.claude-plugin/plugin.json`
+   and register the path in the root Claude marketplace. For BB plugins, use a `bb-plugin-<name>`
+   package/folder, declare the backend in `package.json`, and register its path in
+   `.bb/plugins.json`. Keep the runtime-specific indexes separate. See the
+   [Claude reference](https://code.claude.com/docs/en/plugins-reference) and
+   [BB Plugin Guide](https://getbb.app/plugin-guide).
 5. Add synthetic fixtures and behavioral tests, update the changelog, and record third-party
    origins. Test the executable helper after copying the plugin to a temporary directory.
 

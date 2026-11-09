@@ -1,0 +1,43 @@
+{
+  "checks": [
+    {
+      "name": "Policy, coordinator and factory tests",
+      "status": "passed",
+      "cases": 33
+    },
+    {
+      "name": "BB plugin build and SDK artifact metadata",
+      "status": "passed",
+      "sdkVersion": "0.6.132"
+    },
+    {
+      "name": "No dependency requirements or external runtime imports",
+      "status": "passed"
+    },
+    {
+      "name": "Installation into running BB",
+      "status": "passed",
+      "note": "Local path install from the toolkit collection loaded the background service and read-only CLI; off defaults verified before activation."
+    },
+    {
+      "name": "Paid natural-trigger trial",
+      "status": "untested",
+      "note": "Scoped activation approved and configured; no submission has occurred. Requires fresh eligible usage above threshold followed by the idle cutoff."
+    },
+    {
+      "name": "Toolkit repository and relocated plugin tests",
+      "status": "passed",
+      "repositoryCases": 51,
+      "relocatedNodeCases": 33
+    },
+    {
+      "name": "Toolkit metadata, Oxfmt and Markdown checks",
+      "status": "passed"
+    },
+    {
+      "name": "Full Python formatting/lint/pytest gate",
+      "status": "blocked",
+      "note": "Ruff and pytest are not installed in the active Python environment. Standard-library fallback completed; no tools installed."
+    }
+  ]
+}
