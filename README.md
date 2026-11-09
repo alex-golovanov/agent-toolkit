@@ -10,7 +10,39 @@ native Codex compaction across eligible BB conversations.
 | [BB Auto Compact](plugins/bb-plugin-auto-compact/README.md) | Global or selected idle compaction for Codex threads    | BB, existing Codex setup; no package dependencies |
 | [Standalone skills](skills/README.md)                       | Location for independent skills as the collection grows | Defined by each skill                             |
 
-## Turn rough ideas into something readable
+## BB Auto Compact · start here
+
+**Global Codex compaction after context exceeds 70% and the conversation is idle for 15 minutes.**
+Sol, Astra, and other configured Codex models keep their existing speed and reasoning setting.
+
+```sh
+bb plugin install git:https://github.com/alex-golovanov/agent-toolkit.git@main --plugin bb-plugin-auto-compact
+bb plugin config auto-compact set scope all
+bb plugin config auto-compact set model all
+bb plugin config auto-compact set maxAttempts 0
+bb plugin config auto-compact set mode compact
+bb auto-compact status --json
+```
+
+Fresh installs start **off**, with selected scope and one attempt. The commands above enable
+**global, ongoing paid operation**; `maxAttempts=0` removes the submission-count limit. The
+threshold and idle defaults are already 70% and 15 minutes. Each chat needs fresh model activity
+after activation; the plugin does not catch up old idle sessions.
+
+| Before you start | What to know                                                                                                       |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Runtime          | BB and an existing Codex setup; tested against BB 0.49.0 / SDK 0.6.132                                             |
+| Models           | All configured Codex models; live Sol observations and simulated Astra/multi-speed tests are documented separately |
+| Cost             | Native Codex usage applies; the timer estimates an early opportunity and does not detect exact cache expiry        |
+| Installation     | The repository's `.bb/plugins.json` selects this BB plugin; the Claude marketplace is separate                     |
+
+**[Read the complete setup, model evidence, settings, and troubleshooting guide →](plugins/bb-plugin-auto-compact/README.md)**
+
+No npm publication or marketplace step is needed for this branch-tracking Git installation.
+
+---
+
+## Style Skills · turn rough ideas into readable prose
 
 A braindump usually has the material you need: the observation, the failed attempt, the useful
 change, and the reason it matters. An agent can organize that material into prose. Style Skills adds
@@ -73,7 +105,7 @@ For the illustrated explanation and a prepared notes-to-draft example, read the
 [local viewing instructions](docs/serving.md). The example is synthetic and interactive controls
 show prepared text; they do not run a model.
 
-## Load the plugin
+## Install Style Skills
 
 Claude Code users can register this public marketplace and install the plugin themselves:
 
@@ -91,17 +123,6 @@ configured skill directory, keeping them as siblings. Each skill resolves resour
 location; only Claude's plugin mode uses `CLAUDE_PLUGIN_ROOT`. See the
 [plugin guide](plugins/style-skills/README.md). Structural checks and relocated CLI tests do not
 prove runtime compatibility with every agent; no live agent installation is part of the test suite.
-
-## BB Auto Compact
-
-The BB plugin lives in `plugins/bb-plugin-auto-compact/` and is indexed separately in
-`.bb/plugins.json`; it is not a Claude plugin. It starts off and uses context above 70% plus 15 idle
-minutes as an early policy, not an exact cache-expiry detector. Native compaction consumes Codex
-usage. Read the [plugin guide](plugins/bb-plugin-auto-compact/README.md) before installation or
-activation.
-
-After explicit installation approval, install from this collection root with
-`bb plugin install path:. --plugin bb-plugin-auto-compact --yes`. No package install is needed.
 
 ## Develop
 

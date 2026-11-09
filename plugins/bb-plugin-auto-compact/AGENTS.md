@@ -8,18 +8,17 @@ The approved policy starts at context **above 70%** and **15 minutes continuousl
 early idle policy, not an exact cache-expiry detector. Model activity resets the timer. Ordinary
 timeline activity does not.
 
-The user explicitly approved global, repeated automatic compaction and subsequently requested all
-Codex models, including Sol and Astra. Use `scope=all` and `model=all` for that live scope,
-preserving each conversation's current model, speed, and reasoning setting. Do not impose new model
-or speed restrictions without discussing them. The owner has removed the attempt cap: a read-only
-check confirmed live `maxAttempts=0`; do not restore the initial one-attempt limit. The agent's
-earlier attempt to remove it was blocked by execution permissions and was not bypassed by code or
-another tool. The threshold and idle cutoff remain 70% / 15 minutes. No forced or shortened paid
-tests, new providers, or tooling installation are authorized. Fresh usage is required after
-activation/reload; old idle sessions are not caught up. Hidden/archived chats, active or pending
-work, offline hosts, and unknown context/execution shapes remain ineligible. New installs default
-off and selected, with the all-model filter; explain the effective scope and any remaining limits
-clearly.
+Global ongoing operation uses `scope=all`, `model=all`, and `maxAttempts=0` after the user's
+applicable approval. Preserve each conversation's current model, speed, and reasoning setting. Do
+not add undisclosed model/speed restrictions or restore a trial limit in an ongoing installation.
+Fresh usage is required after activation/reload; old idle sessions are not caught up. Hidden or
+archived chats, active or pending work, offline hosts, and unknown context/execution shapes remain
+ineligible. New installs default off and selected with one attempt and the all-model filter. Explain
+effective defaults and remaining limits clearly.
+
+Keep live-verification claims tied to native evidence. Fake-SDK tests do not establish successful
+live execution on every model or tier. Publish only sanitized aggregate verification metadata; never
+include personal conversation text, IDs, titles, credentials, or machine-specific paths.
 
 Never run compaction as a test without approved paid-call scope. Keep all automated tests on fake
 SDK calls and injected clocks. Native Codex may retry a single operation internally; the plugin

@@ -20,9 +20,9 @@
       "note": "Local path install from the toolkit collection loaded the background service and read-only CLI; off defaults verified before activation."
     },
     {
-      "name": "Paid natural-trigger trial",
-      "status": "untested",
-      "note": "Scoped activation approved and configured; no submission has occurred. Requires fresh eligible usage above threshold followed by the idle cutoff."
+      "name": "Observed natural-trigger native completion",
+      "status": "passed",
+      "note": "Three GPT-6.1 Sol Standard submissions matched by client request ID to completed contextCompaction items and completed native turns. No live Astra claim or cache/billing verification."
     },
     {
       "name": "Toolkit repository and relocated plugin tests",
@@ -53,6 +53,11 @@
       "name": "All Codex models and preserved execution settings",
       "status": "passed",
       "note": "Fake tests accept Sol, Astra, other configured models, and multiple speeds; submissions retain each thread model/tier/reasoning. No forced paid model calls."
+    },
+    {
+      "name": "Compaction cache reuse and exact billing",
+      "status": "untested",
+      "note": "Native compaction samples lack useful input/cache accounting; current boundary-based usage helper can miss contextCompaction item completions."
     }
   ]
 }

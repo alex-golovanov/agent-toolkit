@@ -18,10 +18,17 @@ guarantee.
 
 ## Native outcome validation
 
-The toolkit local-path installation was verified on 2026-11-09: the background service and CLI
-loaded, off defaults were checked, and the approved selected-thread trial was configured. No
-compaction has been submitted. A natural, scoped trigger must still verify native admission and
-cache usage. Do not substitute a shortened or forced compaction without changing the approved scope.
+The local-path plugin installation, background service, settings, and CLI loaded successfully. On
+2026-11-09 a read-only review matched three GPT-6.1 Sol Standard plugin submissions by client
+request ID to native turns. All three contained a completed `contextCompaction` item and a completed
+turn. No forced or shortened model calls were made. Astra remains covered by fake-SDK tests rather
+than separately verified live observations. See the [aggregate snapshot](live-verification.json).
+
+The Codex event path reported `item/completed` with `item.type=contextCompaction` rather than a
+`thread/compacted` boundary. The current usage helper relies on boundaries and can therefore return
+empty despite a successful native operation. The inspected compaction token samples did not expose a
+useful input/cache breakdown. Native completion is verified for these Sol runs; cache reuse, exact
+billing, and net savings are not.
 
 The native operation can encounter queue/admission races after the initial SDK checks. The plugin's
 own admission hook and sender retry-consent handler prevent joining active turns or escaping into
@@ -40,7 +47,8 @@ listing, filtering of hidden/archived/other-provider threads, new conversations,
 during discovery, disposal, repeated content generations, and persistent counters across reloads.
 The public thread list returns a bare array and accepts limit/offset without a project selector.
 Status includes project/title/context fields and bounded per-thread output. Natural native
-compaction and cache reuse remain unverified until an eligible conversation reaches its cutoff.
+completion is verified for the Sol observations above; cache reuse and net savings remain
+unverified.
 
 The global scope is enabled in the live local-path installation. A read-only check confirmed
 `maxAttempts=0`, so the initial one-attempt cap is no longer active. The agent's earlier setting

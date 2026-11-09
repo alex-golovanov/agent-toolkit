@@ -34,6 +34,10 @@ schemas change when measurement compatibility changes.
 
 ### Changed
 
+- Expanded BB Auto Compact documentation into a complete setup and operations guide, with explicit
+  installation defaults, model verification levels, status interpretation, and troubleshooting.
+- Added a BB quick start to the collection index and documented branch-tracking distribution.
+
 - Reworked the READMEs around the human writing workflow, with reusable requests and measurement
   limits.
 
