@@ -9,8 +9,9 @@ receives `bb` through its factory and imports no private packages or external mo
   Standard Schema synchronous validators enforce integer ranges and thread-ID syntax.
 - `bb.storage.kv.get(key)` / `set(key, value)` are **async**, despite the underlying local SQL
   operation. Await persistence before spending. Values are JSON and limited to 256 KiB.
-- `bb.sdk.threads.get({threadId, signal})` returns `{thread, environment, ...}`. Thread fields are
-  not the top-level object.
+- `bb.sdk.threads.get({threadId, include: "environment", signal})` returns the thread itself, with
+  `environment` added only when requested by the include selector. The CLI show wrapper is different
+  and must not be used as the SDK contract.
 - `threads.context({threadId, signal})` returns `{usage}` with `usedTokens`, `modelContextWindow`
   and `estimated`.
 - `threads.defaultExecutionOptions({threadId, signal})` returns the resolved

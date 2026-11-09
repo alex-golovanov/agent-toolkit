@@ -14,6 +14,19 @@ import {
   snapshot,
 } from "./fixtures.js";
 
+test("snapshot reads the flat SDK thread and explicitly includes its environment", async () => {
+  const f = await fixture();
+  const current = await f.coordinator.snapshot(THREAD);
+  assert.equal(current.thread.id, THREAD);
+  assert.equal(current.thread.providerId, "codex");
+  assert.equal(current.environment.id, "env_test");
+  assert.equal(current.host.status, "connected");
+  f.bb.sdk.threads.get = async () => ({ thread: snapshot().thread });
+  await f.arm();
+  assert.equal(f.coordinator.state(THREAD).arm, null);
+  assert.equal(f.calls.length, 0);
+});
+
 test("exactly one native submission occurs at the deadline, with a persisted reservation", async () => {
   const f = await fixture();
   await f.arm();

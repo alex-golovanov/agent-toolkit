@@ -168,7 +168,7 @@ export class Coordinator {
 
   async snapshot(threadId) {
     const [response, context, interactions, queued, execution] = await Promise.all([
-      this.bb.sdk.threads.get({ threadId, signal: this.abort.signal }),
+      this.bb.sdk.threads.get({ threadId, include: "environment", signal: this.abort.signal }),
       this.bb.sdk.threads.context({ threadId, signal: this.abort.signal }),
       this.bb.sdk.threads.interactions.list({ threadId, signal: this.abort.signal }),
       this.bb.sdk.threads.queuedMessages.list({ threadId, signal: this.abort.signal }),
@@ -181,7 +181,7 @@ export class Coordinator {
         })
       : null;
     return {
-      thread: response?.thread,
+      thread: response,
       environment: response?.environment,
       host,
       usage: context?.usage,

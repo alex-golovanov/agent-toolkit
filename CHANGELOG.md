@@ -19,6 +19,9 @@ schemas change when measurement compatibility changes.
 
 ### Fixed
 
+- BB Auto Compact reads the SDK thread directly and explicitly includes its environment; the live
+  installation check now agrees with the fake SDK regression fixture.
+
 - Corrected Markdown lint issues in the pull request template and corpus-boundary documentation.
 - Markdown line wrapping no longer creates false sentence boundaries. Explicit list items, headings,
   and blank paragraphs retain boundaries. Rebuild older profiles made from wrapped source prose.

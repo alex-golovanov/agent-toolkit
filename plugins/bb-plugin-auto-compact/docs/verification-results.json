@@ -3,7 +3,7 @@
     {
       "name": "Policy, coordinator and factory tests",
       "status": "passed",
-      "cases": 33
+      "cases": 34
     },
     {
       "name": "BB plugin build and SDK artifact metadata",
@@ -28,7 +28,7 @@
       "name": "Toolkit repository and relocated plugin tests",
       "status": "passed",
       "repositoryCases": 51,
-      "relocatedNodeCases": 33
+      "relocatedNodeCases": 34
     },
     {
       "name": "Toolkit metadata, Oxfmt and Markdown checks",

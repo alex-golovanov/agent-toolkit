@@ -92,10 +92,13 @@ export async function fixture(options = {}) {
         },
       },
       threads: {
-        async get({ threadId }) {
+        async get({ threadId, include }) {
           if (faults.threadGet) await faults.threadGet(threadId);
           const { thread, environment } = snapshots.get(threadId);
-          return structuredClone({ thread, environment });
+          return structuredClone({
+            ...thread,
+            ...(include === "environment" ? { environment } : {}),
+          });
         },
         async context({ threadId }) {
           return structuredClone({ usage: snapshots.get(threadId).usage });
