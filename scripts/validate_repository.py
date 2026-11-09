@@ -133,7 +133,9 @@ def validate_bb_collection(root):
         manifest = read_object(source / "package.json")
         if manifest.get("name") != name or not name.startswith("bb-plugin-"):
             raise ValueError(f"{name}: BB package name differs from collection or lacks prefix")
-        if not isinstance(manifest.get("version"), str) or not VERSION.fullmatch(manifest["version"]):
+        if not isinstance(manifest.get("version"), str) or not VERSION.fullmatch(
+            manifest["version"]
+        ):
             raise ValueError(f"{name}: invalid BB plugin version")
         bb = manifest.get("bb")
         if not isinstance(bb, dict) or not all(

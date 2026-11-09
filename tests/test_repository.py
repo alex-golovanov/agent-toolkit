@@ -86,7 +86,9 @@ class RepositoryTests(unittest.TestCase):
         self.assertIn("meta / language: en", result.stdout)
 
     def test_bb_collection_rejects_duplicate_and_escaping_sources(self):
-        self.update_json(".bb/plugins.json", lambda data: data["plugins"].append(data["plugins"][0]))
+        self.update_json(
+            ".bb/plugins.json", lambda data: data["plugins"].append(data["plugins"][0])
+        )
         self.assertTrue(any("duplicate BB" in error for error in validator.validate(self.root)))
         self.update_json(
             ".bb/plugins.json",
@@ -97,7 +99,9 @@ class RepositoryTests(unittest.TestCase):
     def test_bb_manifest_and_entry_are_checked(self):
         path = "plugins/bb-plugin-auto-compact/package.json"
         self.update_json(path, lambda data: data.update(name="wrong"))
-        self.assertTrue(any("package name differs" in error for error in validator.validate(self.root)))
+        self.assertTrue(
+            any("package name differs" in error for error in validator.validate(self.root))
+        )
         self.update_json(path, lambda data: data.update(name="bb-plugin-auto-compact"))
         self.update_json(path, lambda data: data["bb"].update(server="./missing.js"))
         self.assertTrue(any("server entry" in error for error in validator.validate(self.root)))
